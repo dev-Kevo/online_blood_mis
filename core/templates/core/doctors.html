@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <!-- CSS stylesheets and other head elements here -->
+    <link rel="stylesheet" href="{% static 'css/doctors.css' %}">
+</head>
+<body>
+    <div class="container">
+      <div class="sidebar">
+        <h1>Doctor Dashboard</h1>
+        <div class="profile">
+          <img src="#" alt="doctor">
+          <p>{{request.user}} | Doctor</p>
+        </div>
+        <!-- Add any additional header elements or navigation here -->
+        <ul>
+          <li><a href="#">Overview</a></li>  <!-- Display key statistics and notifications here -->
+          <li><a href="#">Blood Inventory</a></li> <!-- Display current stock, alerts, and request options -->
+          <li><a href="#">Donor Management</a></li>  <!-- Display donor information, search, and filtering options -->
+          <li><a href="#">Patient Management</a></li>  <!-- Display patient information and status updates -->
+          <li><a href="#">Appointment Scheduling</a></li> <!-- Display calendar view and scheduling options -->
+        </ul>
+        <div class="additional">
+          <button class="btn">Settings</button>
+          <button class="btn"><a href="{% url 'logout' %}">Logout</a></button>
+        </div>
+    </div>
+    <div class="content">
+      <h1>Some content goes here</h1>  <footer class="footer">
+        <div class="message">
+            <p>&copy; 2023 Made with love by kevo. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+    </div>
+
+
+    <!-- JavaScript files and other scripts here -->
+
+</body>
+</html>

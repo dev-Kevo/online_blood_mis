@@ -1,0 +1,107 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+}
+
+/* for all Links in the page */
+a{
+    text-decoration: none;
+    cursor: pointer;
+    color: #000;
+}
+
+/* Button clases */
+.btn{
+    outline: none;
+    padding: 10px;
+    border: none;
+    background-color: #d3d0d0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+body{
+    width: 100vw;
+    height: 100vh;
+}
+
+.container{
+    display: flex;
+    height: 100%;
+
+}
+
+.sidebar{
+    background-color: #020d15;
+    height: 100%;
+    color: #fff;
+    width: 350px;
+    position: relative;
+
+}
+
+.sidebar h1{
+    text-align: center;
+    /* background-color: aquamarine; */
+    color: #020d15;
+    padding: 20px;
+    color: #12b6c2
+}
+
+.sidebar .profile{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+   margin-top: 20px;
+}
+
+.sidebar ul{
+   list-style: none;
+}
+
+.sidebar ul li{
+    background-color: #8c8c8c;
+    margin: 10px;
+    padding: 10px;
+    list-style: none;
+    border-radius: 4px;
+    transform: scale(0.9);
+    transition: all 0.3s ease;
+}
+
+.sidebar ul li:hover{   
+    transform: scale(0.95);
+
+}
+
+.sidebar ul li a{
+   color: #fff;
+}
+
+
+.additional{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #12b6c2;
+    padding: 20px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.message{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

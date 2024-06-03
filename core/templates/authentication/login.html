@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock styles %}
+
+{% block content %}
+    <div class="h1">
+        <h1>Login here</h1>
+    </div>
+
+    <form action="#" method="post">
+        {% if messages %}
+        {% for message in messages %}
+          <ul class="error_list">
+              <li>{{message}}</li>
+          </ul>
+        {% endfor %}
+      {% endif %}
+      
+        {% csrf_token %}
+        {{form.as_p}}
+        <p>Forgot your password <a href="{% url 'register' %}">Reset</a></p>
+        <p>Dont have an Account? <a href="{% url 'register' %}">Sign up</a></p>
+        <div class="submit">
+            <input type="submit" value="Login">
+        </div>
+    </form>
+{% endblock content %}

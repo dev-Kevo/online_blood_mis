@@ -1,0 +1,61 @@
+/* styles.css */
+
+/* Body Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #3498db;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around; /* Distribute space evenly between elements */
+    align-items: center; /* Center items vertically */
+    height: 60px;
+    padding: 20px;
+}
+
+.links{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    font-size: 1rem;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+    background-color: #2980b9;
+    border-radius: 5px;
+}
+
+/* Content Styles */
+.container {
+    margin-top: 20px;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.message{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

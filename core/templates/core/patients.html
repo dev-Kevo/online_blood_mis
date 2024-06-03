@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Dashboard
+{% endblock title %}
+
+{% block content %}
+  <h3>Welcome to the Patients dashboard</h3>
+  <h1>{{request.user}}</h1>
+
+  {% if messages %}
+    {% for message in messages %}
+       {{message}}
+    {% endfor %}
+  {% endif %}
+
+{% endblock content %}

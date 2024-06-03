@@ -1,0 +1,60 @@
+/* styles.css */
+
+/* Center the form and give it a professional look */
+form {
+    max-width: 400px; /* Adjust the maximum width as needed */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f4; /* Light gray background color */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle box-shadow for depth */
+}
+
+
+/* Style for the H1 */
+.h1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style for the username class */
+.username,
+.email,
+.password1,
+.password2 {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: none;
+    outline: 1px solid #3498db;
+    border-radius: 5px;
+}
+
+/* Style for the radio buttons */
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* Style for the form submit button */
+input[type="submit"] {
+    background-color: #3498db; /* Blue submit button */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: center;
+}
+
+input[type="submit"]:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+
+
+.submit{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
