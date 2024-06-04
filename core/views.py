@@ -1,69 +1,65 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from . models import CustomeUser
+from . models import CustomUser
 from core.forms import LoginForm, RegistrationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views.generic import TemplateView
 
 # Create your views here.
 from django.contrib.auth import login, authenticate
 
 def register(request):
-    form = RegistrationForm()
-
+    """
+    Register user and assign the relevant role
+    """
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             user_type = form.cleaned_data['register_as']
             password = form.cleaned_data['password1']
 
-            # Create a new user instance without saving it yet
-            new_user = CustomeUser(username=username, email=email, password=password)
+            # Use the create_user method to create a new user
+            new_user = CustomUser.objects.create_user(username=username, email=email, password=password)
 
-
+            # Set user type attributes based on form data
             if user_type == 'donor':
                 new_user.is_donor = True
-                new_user.is_patient = False
-                new_user.is_doctor = False
-                new_user.is_verified = False
             elif user_type == 'patient':
                 new_user.is_patient = True
-                new_user.is_donor = False
-                new_user.is_doctor = False
-                new_user.is_verified = False
             else:
                 new_user.is_doctor = True
-                new_user.is_donor = False
-                new_user.is_patient = False
-                new_user.is_verified = False
 
-
-            # Save the user to the database
+            # Ensure all user types have default values
+            new_user.is_verified = False
             new_user.save()
 
-            # Authenticate the user after saving
-            user = authenticate(username=username, password=password, email=email)
-            login(request, user)
-            if user_type == 'donor':
+            # Authenticate the user
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
                 login(request, user)
-                return redirect('donor_dashboard')
-            elif user_type == 'patient':
-                login(request, user)
-                return redirect('patient_dashboard')
-            else:
-                login(request, user)
-                return redirect('doctors')
+                # Redirect based on user type
+                if user_type == 'donor':
+                    return redirect('donor_dashboard')
+                elif user_type == 'patient':
+                    return redirect('patient_dashboard')
+                else:
+                    return redirect('doctors')
 
-        # If form is not valid, it will be re-rendered with errors
+        # If the form is not valid, it will be re-rendered with errors
+    else:
+        form = RegistrationForm()
 
-    # For GET requests or if the form is not valid
     return render(request, 'authentication/register.html', {'form': form})
 
 
 def login_user(request):
+    """
+    Login the user based on his/her role
+    """
     form = LoginForm()
 
     if request.method == 'POST':
@@ -71,8 +67,8 @@ def login_user(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            print(username)
-            print(password)
+            # print(username)
+            # print(password)
 
             user = authenticate(username=username, password=password)
             print(user)
@@ -101,23 +97,37 @@ def login_user(request):
 
 
 def logout_user(request):
+    """
+    Log out the user
+    """
     logout(request)
     return redirect('login')
     # return render(request, 'authentication/logged.html')
 
 def doctor_update_info(request):
+    """
+    make sure the doctor has updated the required information
+    """
 
     return render(request, 'core/doctors_update_info.html')
 
 def patient_update_info(request):
-
+    """
+    make sure the patient has updated the required information
+    """
     return render(request, 'core/patients_update_info.html')
 
 def donor_update_info(request):
+    """
+    make sure the donor has updated the required information
+    """
 
     return render(request, 'core/donors_update_info.html')
 
 def patients(request):
+    """
+    Patients Dashboard
+    """
     user = request.user
     if user.is_verified:
         messages.success(request, "Verified Successfully")
@@ -127,10 +137,36 @@ def patients(request):
     return render(request, 'patients/patients.html')
 
 def donors(request):
-    user = CustomeUser.objects.filter(username=request.user)
+    """
+    Donors Dashboard
+    """
+    user = CustomUser.objects.filter(username=request.user)
     
     return render(request, 'donors/donor.html')
 
-def doctors(request):
 
+def doctors(request):
+    """
+    Doctors Dashboard
+    """
     return render(request, 'core/doctors.html')
+
+
+class About(TemplateView):
+    """
+    the about page
+    """
+    template_name = "main/about.html"
+
+class FAQ(TemplateView):
+    """
+    Frequent asked questions
+    """
+    template_name = "main/faq.html"      
+
+class Pricacy(TemplateView):
+    """
+    the privace policy
+    """
+    template_name = "main/privacy.html"        
+            

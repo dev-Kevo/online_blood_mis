@@ -10,7 +10,6 @@ class CustomUserManager(BaseUserManager):
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
-
         return user
 
     def create_superuser(self, username, email, password=None, **extra_fields):
@@ -19,10 +18,10 @@ class CustomUserManager(BaseUserManager):
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError("Superuser must have is_staff=True")
-        if extra_fields.get("is_superuser"):
+        if extra_fields.get('is_superuser') is not True:
             raise ValueError("Superuser must have is_superuser=True")
-        
-        return self.create_user(username, email, **extra_fields)
+
+        return self.create_user(username, email, password, **extra_fields)
 
 
 
@@ -41,7 +40,7 @@ BloodGroup = (
     ('AB-','AB-'),
 ) 
 
-class CustomeUser(AbstractUser):
+class CustomUser(AbstractUser):
     id_number = models.CharField(max_length=8, blank=True)
     phone_number = models.CharField(max_length=12, blank=True)
     next_of_kin = models.CharField(max_length=255, blank=True)

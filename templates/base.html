@@ -1,5 +1,5 @@
 <!-- base.html -->
-{% load static %}
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +11,12 @@
    {% endblock styles %}
     <!-- Link your custom JavaScript file -->
     <script src="{% static 'js/app.js' %}"></script>
+    
     <!--  other meta tags, title, and other stylesheets go here -->
+    {% block head %}{% endblock head %}
+
+    
+    {% tailwind_css %}
 </head>
 <body>
 
@@ -20,17 +25,15 @@
     <h1><a class="navbar-brand" href="#">Online Blood MS</a></h1>
     <div class="collapse" id="navbarNav">
         <ul class="links">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
+           
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">About Us</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
+                <a class="nav-link" href="{% url 'faq' %}">FAQs</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">FAQs</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Privacy</a>
+                <a class="nav-link" href="{% url 'privacy' %}">Privacy</a>
             </li>
         </ul>
     </div>
@@ -51,7 +54,7 @@
 <!-- Footer -->
 <footer class="footer">
     <div class="message">
-        <p>&copy; 2023 Made with love by kevo. All rights reserved.</p>
+        <p>&copy; 2024 Made with love by kevo. All rights reserved.</p>
     </div>
 </footer>
 

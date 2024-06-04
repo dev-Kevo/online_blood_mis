@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+  About
+{% endblock title %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+<div class="container mx-auto">
+    <div class="top bg-slate-100 p-3">
+        <h1 class="text-2xl text-center font-bold underline mb-2">About</h1>
+        <p class="text-justify">
+          This is a revolutionary platform designed to streamline the management of blood donor records and optimize the distribution of blood across various regions based on hospital demands. Our mission is to ensure that no patient ever faces the struggle of searching for blood in times of critical need, and to support healthcare providers with timely and accurate information.
+        </p>
+        <div class="mission bg-white p-2 border-l-4 border-cyan-600 mt-4 rounded">
+          <h2 class="text-xl underline mb-2">Our Mission</h2>
+          <p class="italic text-justify">The core objective of our system is to facilitate quick and efficient access to donor records, which are collected from different parts of the country. By providing this essential data, we aim to enhance the strategies for blood donation campaigns, increase donor sensitization, and improve the overall efficiency of blood management.</p>
+        </div>
+
+        <div class="main grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="points mt-3 bg-white rounded p-2">
+            <h1 class="text-xl text-center font-bold underline mb-2">What We Offer</h1>
+            <ul class="">
+              <li class="mb-1">1. Quick Access to Donor Records: Our system allows for the swift retrieval of donor information, ensuring that healthcare providers can access the data they need without delay.</li>
+              <li class="mb-1">2. Monitoring and Reporting: We provide comprehensive tools for monitoring the results and performance of blood donation activities. This helps organizations set relevant, measurable objectives and track their progress effectively.</li>
+              <li class="mb-1">3. Timely, Confidential, and Secure Reports: Our platform generates medical reports that are crucial for planning and decision-making, ensuring that management can rely on accurate and secure information.</li>
+              <li class="mb-1">4. Improved Medical Service Delivery: By addressing the challenges associated with managing blood donor records, our system supports better medical service delivery, ultimately benefiting patients and healthcare providers alike.</li>
+            </ul>
+          </div>
+
+          <div class="extras bg-white rounded mt-3 p-2">
+            <h1 class="text-xl text-center font-bold underline mb-2">How We Help Patients</h1>
+            <p>One of the key features of our system is to relieve patients from the burden of searching for blood themselves. Patients can log into our website and easily search for the availability of their specific blood group at various donation centers linked to our system. This not only saves time but also provides peace of mind during critical situations.</p>
+          </div>
+
+          <div class="extras bg-white rounded mt-3 p-2">
+            <h1 class="text-xl text-center font-bold underline mb-2">Commitment to Excellence</h1>
+            <p>We are dedicated to improving the efficiency and effectiveness of blood management. Our system is designed to address the challenges faced by healthcare providers and patients, offering a reliable solution that supports the overall goal of enhanced medical service delivery.</p>
+          </div>
+        </div>
+
+
+        <div class="closing mt-2 mb-5">
+          <p class="italic">Join us in our mission to create a more efficient, responsive, and supportive blood donation and management system. Together, we can ensure that life-saving blood is always available when and where it is needed most.</p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

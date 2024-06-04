@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import CustomeUser
+from .models import CustomUser
 from .forms import CustomUserCreationForm
 from django.contrib.auth.admin import UserAdmin
 
 class CustomAdmin(UserAdmin):
     add_form = CustomUserCreationForm
-    model = CustomeUser
+    model = CustomUser
     fieldsets = (
         *UserAdmin.fieldsets,
         (
@@ -29,6 +29,6 @@ class CustomAdmin(UserAdmin):
  
     
 
-admin.site.register(CustomeUser, CustomAdmin)
+admin.site.register(CustomUser, CustomAdmin)
 
 # Register your models here.

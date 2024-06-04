@@ -14,4 +14,9 @@ urlpatterns = [
     path('', views.doctors, name='doctors_dashboard'),
     path('patients/', views.patients, name='patient_dashboard'),
     path('donors/', views.donors, name='donor_dashboard'),
+
+    # path('tailwind/', views.tailwind_test, name='tailwind_test'),
+    path('about/', views.About.as_view(), name='about'),
+    path('faq/', views.FAQ.as_view(), name='faq'),
+    path('privacy/', views.Pricacy.as_view(), name='privacy'),
 ]

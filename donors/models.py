@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import CustomeUser
+from core.models import CustomUser
 
 # Create your models here.
 class Donor(models.Model):
@@ -22,7 +22,7 @@ class Donor(models.Model):
         MATCHING = 'Matching donations'
         WORKPLACE = 'Workplace donations'
         EVENT = 'Event donations'
-    donor = models.ForeignKey(CustomeUser, on_delete=models.CASCADE, null=True, blank=True)
+    donor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True)
     preferred_contact_method = models.CharField(blank=True, max_length=255)
     total_number_of_donations = models.IntegerField(blank=True)
     is_eligible_to_donate = models.BooleanField(default=True, blank=True)

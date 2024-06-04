@@ -29,6 +29,10 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 
 # Application definition
 
@@ -44,9 +48,18 @@ INSTALLED_APPS = [
     'donors',
     'patients',
 
+    'tailwind',
+    'theme',
+    'django_browser_reload',
+
 ]
 
-AUTH_USER_MODEL = 'core.CustomeUser'
+AUTH_USER_MODEL = 'core.CustomUser'
+TAILWIND_APP_NAME = 'theme'
+
+# C:\Program Files\nodejs\npm.cmd
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'blood_sys.urls'

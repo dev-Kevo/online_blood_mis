@@ -1,10 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from core.models import CustomeUser
+from core.models import CustomUser
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
-        model = CustomeUser
+        model = CustomUser
         fields = '__all__'
 
 class RegistrationForm(UserCreationForm):
@@ -20,7 +20,7 @@ class RegistrationForm(UserCreationForm):
     register_as = forms.ChoiceField(choices=USER_TYPE_CHOICES, widget=forms.RadioSelect, required=True, )
     
     class Meta:
-        model = CustomeUser
+        model = CustomUser
         fields = [
             'username',
             'email',
@@ -37,7 +37,7 @@ class LoginForm(forms.Form):
         
 class UpdateInforForm(forms.ModelForm):
     class Meta:
-        model = CustomeUser
+        model = CustomUser
         fields = [
             'id_number',
             'phone_number',
