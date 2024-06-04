@@ -1,17 +1,15 @@
 from django.contrib import admin
 
-from .models import Donor, Record
+from .models import Donor
 
 # Register your models here.
 
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
     list_display = [
-        'donor', 'is_eligible_to_donate'
+        'user',
+        'donation_location',
+        'date_of_donation',
     ]
 
-@admin.register(Record)
-class RecordAdmin(admin.ModelAdmin):
-    list_display = [
-        'donor', 'preffered_donation_location'
-    ]
+

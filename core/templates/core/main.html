@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+  welcome
+{% endblock title %}
+
+
+{% block head %}
+  
+{% endblock head %}
+
+{% block content %}
+  <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 bg-slate-100 p-10">
+   <div class="main w-full bg-gray-100 text-center p-5">
+        <h2 class="font-bold text-xl mb-2">WELCOME TO OBMS</h2>
+        <h1 class="text-5xl text-cyan-500 mt-3 mb-5">DONATE . RECEIVE BLOOD</h1>
+        <p>Timely, Confidential, and Secure Reports</p>
+   </div>
+   <div class="img bg-yellow-200 h-52 border-2 border-cyan-300 w-full">
+    <p>image slider placeholder</p>
+   </div>
+   <div class="start text-center">
+       <button class="bg-cyan-400 py-2 px-4 rounded"><a href="{% url 'login' %}">Get Started</a></button>
+   </div>
+  </div>
+{% endblock content %}

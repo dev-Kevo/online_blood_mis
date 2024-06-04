@@ -12,7 +12,7 @@ class Donor(models.Model):
         EMAIL = 'email', 'Email'
         PHONENUMBER = 'phonenumber', 'Phonenumber'
 
-    class Preffered_Contact_Method(models.TextChoices):
+    class DonationType(models.TextChoices):
         ONE_TIME = 'One-time donations'
         RECURRING = 'Recurring donations'
         PLANNED = 'Planned donations'
@@ -22,34 +22,34 @@ class Donor(models.Model):
         MATCHING = 'Matching donations'
         WORKPLACE = 'Workplace donations'
         EVENT = 'Event donations'
-    donor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True)
-    preferred_contact_method = models.CharField(blank=True, max_length=255)
-    total_number_of_donations = models.IntegerField(blank=True)
-    is_eligible_to_donate = models.BooleanField(default=True, blank=True)
-    type_donation = models.CharField(max_length=200, blank=True)
+
+    class PrefferedDonationLocations(models.TextChoices):
+        NAIROBI = 'Nairobi Blood Transfusion Centre', 'Nairobi Blood Transfusion Centre'
+        MOMBASA = 'Mombasa Blood Transfusion Centre', 'Mombasa Blood Transfusion Centre'
+        KISUMU = 'Kisumu Blood Transfusion Centre', 'Kisumu Blood Transfusion Centre'
+        EMBU = 'Embu Blood Transfusion Centre', 'Embu Blood Transfusion Centre'
+        NAKURU = 'Nakuru Blood Transfusion Centre', 'Nakuru Blood Transfusion Centre'
+        ELDORET = 'Eldoret Blood Transfusion Centr', 'Eldoret Blood Transfusion Centr'
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     profile_photo = models.ImageField(upload_to='donors', default='', blank=True)
+    id_number = models.CharField(max_length=12, null=True, blank=True)
+    gender = models.CharField(max_length=12, choices=GenderSelect, null=True, blank=True)
+    phone_number = models.CharField(max_length=12, null=True, blank=True)
+    donation_location = models.CharField(max_length=255, choices=PrefferedDonationLocations, null=True, blank=True)
+    preferred_contact_method = models.CharField(blank=True, max_length=255, choices=Preffered_Contact_Method, null=True)
+    date_of_donation = models.DateTimeField(null=True, blank=True)
+
+    # these fields will be populated when the user vistis the station
+    is_eligible_to_donate = models.BooleanField(default=True, blank=True) #----> doctor to conduct a survey
+    type_donation = models.CharField(max_length=200, blank=True, choices=DonationType)
     address = models.TextField(blank=True)
-    weight_kg = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
+    weight_kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     last_donation_date = models.DateField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.username
+        return self.user.username
     
 
 
-class PrefferedDonationLocations(models.TextChoices):
-    NAIROBI = 'Nairobi Blood Transfusion Centre', 'Nairobi Blood Transfusion Centre'
-    MOMBASA = 'Mombasa Blood Transfusion Centre', 'Mombasa Blood Transfusion Centre'
-    KISUMU = 'Kisumu Blood Transfusion Centre', 'Kisumu Blood Transfusion Centre'
-    EMBU = 'Embu Blood Transfusion Centre', 'Embu Blood Transfusion Centre'
-    NAKURU = 'Nakuru Blood Transfusion Centre', 'Nakuru Blood Transfusion Centre'
-    ELDORET = 'Eldoret Blood Transfusion Centr', 'Eldoret Blood Transfusion Centr'
-
-
-class Record(models.Model):
-    donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
-    preffered_donation_location = models.CharField(max_length=90, choices=PrefferedDonationLocations.choices)
-
-    def __str__(self) -> str:
-        return self.donor.username
     

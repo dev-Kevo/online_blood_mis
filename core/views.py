@@ -36,20 +36,26 @@ def register(request):
             # Ensure all user types have default values
             new_user.is_verified = False
             new_user.save()
-
+            return redirect("login")
+            # authenticate(request, username=username, password=password)
+            # login(request, user)
             # Authenticate the user
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                # Redirect based on user type
-                if user_type == 'donor':
-                    return redirect('donor_dashboard')
-                elif user_type == 'patient':
-                    return redirect('patient_dashboard')
-                else:
-                    return redirect('doctors')
+            # user = CustomUser.objects.filter(username=username)
+            
+            # if user is not None:
+                
+            #     # Redirect based on user type
+            #     if user.is_donor == 'donor':
+            #         print("the user is donor")
+            #         return redirect('donor_dashboard')
+            #     elif user.is_patient == 'patient':
+            #         print("the user is patient")
+            #         return redirect('patient_dashboard')
+            #     elif user.is_doctor:
+            #         print("the user is doctor")
+            #         return redirect('doctors_dashboard')
 
-        # If the form is not valid, it will be re-rendered with errors
+    # If the form is not valid, it will be re-rendered with errors
     else:
         form = RegistrationForm()
 
@@ -86,8 +92,8 @@ def login_user(request):
             
             elif user is not None and user.is_donor:
                 if user.is_verified:
-                    return redirect("donor_update_info")
-                return redirect('donor_dashboard')
+                    return redirect("donor_dashboard")
+                return redirect('donor_update_info')
             else:
                 messages.error(request, 'Invalid username or password')
         else:
@@ -115,6 +121,7 @@ def patient_update_info(request):
     """
     make sure the patient has updated the required information
     """
+    
     return render(request, 'core/patients_update_info.html')
 
 def donor_update_info(request):
@@ -129,6 +136,8 @@ def patients(request):
     Patients Dashboard
     """
     user = request.user
+    if user == "AnonymousUser":
+        return redirect('login')
     if user.is_verified:
         messages.success(request, "Verified Successfully")
     else:
@@ -141,9 +150,16 @@ def donors(request):
     Donors Dashboard
     """
     user = CustomUser.objects.filter(username=request.user)
+    print(user)
     
     return render(request, 'donors/donor.html')
 
+
+def welcome(request):
+    """
+    This view will welcome the user and prompt for login
+    """
+    return render(request, 'core/main.html')
 
 def doctors(request):
     """
