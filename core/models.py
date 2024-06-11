@@ -7,6 +7,12 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError("Email must be set!")
         email = self.normalize_email(email)
+
+        # Set default values for user types if not explicitly provided
+        extra_fields.setdefault('is_donor', False)
+        extra_fields.setdefault('is_patient', False)
+        extra_fields.setdefault('is_doctor', False)
+
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -16,12 +22,14 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
+        # Ensure the user is correctly marked as staff and superuser
         if extra_fields.get('is_staff') is not True:
-            raise ValueError("Superuser must have is_staff=True")
+            raise ValueError("Superuser must have is_staff=True.")
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError("Superuser must have is_superuser=True")
+            raise ValueError("Superuser must have is_superuser=True.")
 
         return self.create_user(username, email, password, **extra_fields)
+
 
 
 
@@ -53,7 +61,7 @@ class CustomUser(AbstractUser):
     created = models.DateTimeField(auto_now=True)
     modified = models.DateTimeField(auto_now_add=True)
 
-
+ 
     objects = CustomUserManager()
 
     def __str__(self) -> str:

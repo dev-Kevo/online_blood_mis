@@ -1,0 +1,214 @@
+/*CUSTOMIZER CSS*/
+/*Only for demo purpose*/
+:root {
+    /*for customizer*/
+    --indigo:      #6366F1;
+    --pink:        #EC4899;
+    --indigohover: #4F46E5;
+    --red:         #EF4444;
+    --redhover:    #DC2626;
+    --purple:      #8B5CF6;
+    --purplehover: #7C3AED;
+    --blue:        #3B82F6;
+    --bluehover:   #2563EB;
+    --yellowhover: #D97706;
+    --greenhover:  #059669;
+    --pinkhover:   #DB2777;
+    --white:       #ffffff;
+    --darkgray:    #141430;
+    --lightgray:   #98A5C0;
+    --darkness :   #0a0a18;
+  }
+  
+  /*Sidebar light*/
+  .sidebar-dark {
+    color: var(--lightgray);
+    background-color: var(--darkgray);
+  }
+  .sidebar-dark li a {
+    color: var(--lightgray);
+  }
+  .sidebar-dark li a:hover, .sidebar-dark li a.text-indigo-500 {
+    color: var(--white);
+  }
+  .sidebar-dark span.text-gray-700 {
+    color: var(--white);
+  }
+  .sidebar-dark .bg-gray-300 {
+    background-color: #1e1f48;
+  }
+  
+  /*Background customizer*/
+  .bg-reset-500 {
+    background: #1D4ED8;
+  }
+  /*Red*/
+  .theme-red {
+    --colors-indigo-50: #fef2f2;
+    --colors-indigo-100: #fee2e2;
+    --colors-indigo-200: #fecaca;
+    --colors-indigo-300: #fca5a5;
+    --colors-indigo-400: #f87171;
+    --colors-indigo-500: #ef4444;
+    --colors-indigo-600: #dc2626;
+    --colors-indigo-700: #b91c1c;
+    --colors-indigo-800: #991b1b;  
+    --colors-indigo-900: #7f1d1d;
+    --colors-indigo-950: #450a0a;
+  }
+  
+  .theme-red .hover\:text-gray-100:hover, .theme-red .hover\:text-white:hover {
+    color: var(--white);
+  }
+  .theme-red pre[class*="language-"]>code {
+    box-shadow: -1px 0px 0px 0px var(--redhover)
+  }
+  /*Yellow*/
+  .theme-yellow {
+    --colors-indigo-50: #fefce8;
+    --colors-indigo-100: #fef9c3;
+    --colors-indigo-200: #fef08a;
+    --colors-indigo-300: #fde047;
+    --colors-indigo-400: #facc15;
+    --colors-indigo-500: #eab308;
+    --colors-indigo-600: #ca8a04;
+    --colors-indigo-700: #a16207;
+    --colors-indigo-800: #854d0e;  
+    --colors-indigo-900: #713f12;
+    --colors-indigo-950: #422006;
+  }
+  .theme-yellow .hover\:text-gray-100:hover, .theme-yellow .hover\:text-white:hover {
+    color: var(--white);
+  }
+  .theme-yellow pre[class*="language-"]>code {
+    box-shadow: -1px 0px 0px 0px var(--yellowhover)
+  }
+  
+  /*green*/
+  .theme-green {
+    --colors-indigo-50: #f0fdf4;
+    --colors-indigo-100: #dcfce7;
+    --colors-indigo-200: #bbf7d0;
+    --colors-indigo-300: #86efac;
+    --colors-indigo-400: #4ade80;
+    --colors-indigo-500: #22c55e;
+    --colors-indigo-600: #16a34a;
+    --colors-indigo-700: #15803d;
+    --colors-indigo-800: #166534;  
+    --colors-indigo-900: #14532d;
+    --colors-indigo-950: #052e16;
+  }
+  
+  .theme-green .hover\:text-gray-100:hover, .theme-green .hover\:text-white:hover {
+    color: var(--white);
+  }
+  .theme-green pre[class*="language-"]>code {
+    box-shadow: -1px 0px 0px 0px var(--greenhover)
+  }
+  
+  /*blue*/
+  .theme-blue {
+    --colors-indigo-50: #eff6ff;
+    --colors-indigo-100: #dbeafe;
+    --colors-indigo-200: #bfdbfe;
+    --colors-indigo-300: #93c5fd;
+    --colors-indigo-400: #60a5fa;
+    --colors-indigo-500: #3b82f6;
+    --colors-indigo-600: #2563eb;
+    --colors-indigo-700: #1d4ed8;
+    --colors-indigo-800: #1e40af;  
+    --colors-indigo-900: #1e3a8a;
+    --colors-indigo-950: #172554;
+  }
+  
+  .theme-blue .hover\:text-gray-100:hover, .theme-blue .hover\:text-white:hover {
+    color: var(--white);
+  }
+  .theme-blue pre[class*="language-"]>code {
+    box-shadow: -1px 0px 0px 0px var(--bluehover)
+  }
+  
+  /*purple*/
+  .theme-purple {
+    --colors-indigo-50: #faf5ff;
+    --colors-indigo-100: #f3e8ff;
+    --colors-indigo-200: #e9d5ff;
+    --colors-indigo-300: #d8b4fe;
+    --colors-indigo-400: #c084fc;
+    --colors-indigo-500: #a855f7;
+    --colors-indigo-600: #9333ea;
+    --colors-indigo-700: #7e22ce;
+    --colors-indigo-800: #6b21a8;  
+    --colors-indigo-900: #581c87;
+    --colors-indigo-950: #3b0764;
+  }
+  
+  .theme-purple .hover\:text-gray-100:hover, .theme-purple .hover\:text-white:hover {
+    color: var(--white);
+  }
+  .theme-purple pre[class*="language-"]>code {
+    box-shadow: -1px 0px 0px 0px var(--purplehover)
+  }
+  
+  /*pink*/
+  .theme-pink {
+    --colors-indigo-50: #fdf2f8;
+    --colors-indigo-100: #fce7f3;
+    --colors-indigo-200: #fbcfe8;
+    --colors-indigo-300: #f9a8d4;
+    --colors-indigo-400: #f472b6;
+    --colors-indigo-500: #ec4899;
+    --colors-indigo-600: #db2777;
+    --colors-indigo-700: #be185d;
+    --colors-indigo-800: #9d174d;  
+    --colors-indigo-900: #831843;
+    --colors-indigo-950: #500724;
+  }
+  
+  .theme-pink .hover\:text-gray-100:hover, .theme-pink .hover\:text-white:hover {
+    color: var(--white);
+  }
+  .theme-pink pre[class*="language-"]>code {
+    box-shadow: -1px 0px 0px 0px var(--pinkhover)
+  }
+  
+  @media (min-width: 768px) {
+    .sidebar-compact {
+      z-index: 60;
+    }
+    .sidebar-compact .logo-compact{
+      display: inline-block;
+    }
+    .sidebar-compact:hover .logo-compact{
+      display: none !important;
+    }
+    .sidebar-compact .hidden-compact, .sidebar-compact:hover .logo-compact{
+      visibility: hidden;
+      height: 0;
+      width: 0;
+      opacity: 0;
+      transition: visibility 0s, opacity 1.5s linear;
+    }
+    .sidebar-compact:hover .hidden-compact, .sidebar-compact .logo-compact {
+      visibility: visible;
+      height: auto;
+      width: auto;
+      opacity: 1;
+    }
+    .sidebar-compact a span, .sidebar-compact ul li ul, .sidebar-compact .box-banner {
+      display: none;
+    }
+    .sidebar-compact:hover a span {
+      display: inline-block;
+    }
+    .sidebar-compact:hover ul li ul, .sidebar-compact:hover .box-banner {
+      display: block;
+    }
+    .sidebar-compact:hover {
+      width: 16rem;
+    }
+  }
+  
+  .dark :not(pre) > code[class*="language-"], .dark pre[class*="language-"] {
+    background: var(--darkness);
+  }

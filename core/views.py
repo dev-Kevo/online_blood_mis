@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+from donors.models import Donor
 from . models import CustomUser
 from core.forms import LoginForm, RegistrationForm
 from django.contrib.auth import authenticate, login, logout
@@ -7,8 +9,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.generic import TemplateView
 
-# Create your views here.
-from django.contrib.auth import login, authenticate
 
 def register(request):
     """
@@ -22,44 +22,25 @@ def register(request):
             user_type = form.cleaned_data['register_as']
             password = form.cleaned_data['password1']
 
-            # Use the create_user method to create a new user
-            new_user = CustomUser.objects.create_user(username=username, email=email, password=password)
+            # Use the create_user method to create a new user with initial attributes set
+            new_user = CustomUser.objects.create_user(
+                username=username, 
+                email=email, 
+                password=password,
+                is_donor=(user_type == 'donor'),
+                is_patient=(user_type == 'patient'),
+                is_doctor=(user_type == 'doctor')
+            )
 
-            # Set user type attributes based on form data
-            if user_type == 'donor':
-                new_user.is_donor = True
-            elif user_type == 'patient':
-                new_user.is_patient = True
-            else:
-                new_user.is_doctor = True
-
-            # Ensure all user types have default values
-            new_user.is_verified = False
+            # Since the default is_verified is already False, no need to set it again
             new_user.save()
-            return redirect("login")
-            # authenticate(request, username=username, password=password)
-            # login(request, user)
-            # Authenticate the user
-            # user = CustomUser.objects.filter(username=username)
             
-            # if user is not None:
-                
-            #     # Redirect based on user type
-            #     if user.is_donor == 'donor':
-            #         print("the user is donor")
-            #         return redirect('donor_dashboard')
-            #     elif user.is_patient == 'patient':
-            #         print("the user is patient")
-            #         return redirect('patient_dashboard')
-            #     elif user.is_doctor:
-            #         print("the user is doctor")
-            #         return redirect('doctors_dashboard')
-
-    # If the form is not valid, it will be re-rendered with errors
+            return redirect("login")
     else:
         form = RegistrationForm()
 
     return render(request, 'authentication/register.html', {'form': form})
+
 
 
 def login_user(request):
@@ -76,8 +57,8 @@ def login_user(request):
             # print(username)
             # print(password)
 
-            user = authenticate(username=username, password=password)
-            print(user)
+            user = authenticate(request, username=username, password=password)
+            
             if user is not None and user.is_doctor:
                 login(request, user)
                 if user.is_verified:
@@ -91,6 +72,7 @@ def login_user(request):
                 return redirect('patient_update_info')
             
             elif user is not None and user.is_donor:
+                login(request, user)
                 if user.is_verified:
                     return redirect("donor_dashboard")
                 return redirect('donor_update_info')
@@ -129,8 +111,9 @@ def donor_update_info(request):
     make sure the donor has updated the required information
     """
 
-    return render(request, 'core/donors_update_info.html')
+    return render(request, 'donors/donors_update_info.html')
 
+@login_required
 def patients(request):
     """
     Patients Dashboard
@@ -145,12 +128,12 @@ def patients(request):
    
     return render(request, 'patients/patients.html')
 
+@login_required
 def donors(request):
     """
     Donors Dashboard
     """
     user = CustomUser.objects.filter(username=request.user)
-    print(user)
     
     return render(request, 'donors/donor.html')
 
@@ -161,11 +144,20 @@ def welcome(request):
     """
     return render(request, 'core/main.html')
 
+@login_required
 def doctors(request):
     """
     Doctors Dashboard
     """
-    return render(request, 'core/doctors.html')
+
+    donors = Donor.objects.count()
+    print(donors)
+
+    context = {
+        "donors" : donors
+    }
+    
+    return render(request, 'doctors/doctors.html', context)
 
 
 class About(TemplateView):
@@ -184,5 +176,12 @@ class Pricacy(TemplateView):
     """
     the privace policy
     """
-    template_name = "main/privacy.html"        
+    template_name = "main/privacy.html" 
+
+
+class Terms(TemplateView):
+    """
+    Terms and conditions of the Website
+    """
+    template_name = "main/terms.html"        
             

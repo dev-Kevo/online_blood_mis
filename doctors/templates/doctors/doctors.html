@@ -1,0 +1,61 @@
+{% extends "doctors_base.html" %}
+
+{% block content %}
+<main class="mb-20">
+  <div class="top_section">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-3 justify-center">
+     
+        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+
+          <h5 class="mb-2 text-xl text-center font-bold tracking-tight text-gray-900 dark:text-white">Statistics</h5>
+          <div class="content flex justify-between">
+            <div class="donors flex flex-col items-center justify-center">
+              <h1 class="text-xl font-bold">
+                {{donors}}
+              </h1>
+              <p>Donors</p>
+            </div>
+
+            <div class="patients flex flex-col items-center justify-center">
+              <h1 class="text-xl font-bold">
+                {{patients}}
+              </h1>
+              <p>Patients</p>
+            </div>
+
+            <div class="donations flex flex-col items-center justify-center">
+              <h1 class="text-xl font-bold">
+                {{total_donations}}
+              </h1>
+              <p>Donations</p>
+            </div>
+
+          </div>
+        </div>
+              <!-- ------------------------------ -->
+        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+
+          <h5 class="mb-2 text-xl text-center font-bold tracking-tight text-gray-900 dark:text-white">Pending Activities</h5>
+          <div class="font-normal text-gray-700 dark:text-gray-400 flex flex-col items-center justify-center">
+            <span class="bg-cyan-200 rounded-full p-5 w-10 h-10 flex items-center justify-center">7</span>
+            <p>Apointments</p>
+          </div>
+        </div>
+          <!-- ------------------------------ -->
+        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+
+          <h5 class="mb-2 text-xl text-center font-bold tracking-tight text-gray-900 dark:text-white">Reports</h5>
+          <div class="font-normal text-gray-700 dark:text-gray-400 flex flex-col items-center justify-center">
+            <span class="bg-cyan-200 rounded-full p-5 w-10 h-10 flex items-center justify-center">0</span>
+          <p class="font-normal text-gray-700 dark:text-gray-400">Generated Reports</p>
+          </div>
+          
+        </div>
+
+      <!-- Card Item End -->
+
+     
+    </div>
+  </div>
+</main>
+{% endblock content %}

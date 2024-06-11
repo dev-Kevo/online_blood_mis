@@ -19,10 +19,10 @@ form {
 }
 
 /* Style for the username class */
-.username,
-.email,
-.password1,
-.password2 {
+#id_username,
+#id_email,
+#id_password1,
+#id_password2 {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -46,6 +46,20 @@ input[type="submit"] {
     border-radius: 4px;
     cursor: pointer;
     align-self: center;
+}
+
+.errorlist{
+    background: #ffffff;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.errorlist li{
+    font-style: italic;
+    color: red;
+    font-size: smaller;
+    list-style: disc;
+    margin-left: 20px;
 }
 
 input[type="submit"]:hover {

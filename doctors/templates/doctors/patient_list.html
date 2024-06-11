@@ -1,0 +1,59 @@
+{% extends "doctors_base.html" %}
+
+{% block title %} Donors List {% endblock title %}
+
+{% block content %}
+    <div class="container mx-auto p-5 md:p-10">
+        <div class="title">
+            <h1 class="text-2xl font-bold">All Patients</h1>
+        </div>
+        <div class="content mt-5 md:mt-10">
+            
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rounded text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    MR-NO
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Date of Birth
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Blood Group
+                </th>
+                
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <a href="{% url 'patient_details' patient.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{patient.user.username | title }}</a>
+                </th>
+                <td class="px-6 py-4">
+                    {{patient.medical_record_number}}
+                </td>
+                <td class="px-6 py-4">
+                    {{patient.blood_group}}
+                </td>
+                <td class="px-6 py-4">
+                    {{patient.date_of_birth}}
+                </td>
+                
+            </tr>
+            {% endfor %}
+           
+           
+        </tbody>
+    </table>
+</div>
+
+        </div>
+    </div>
+{% endblock content %}
