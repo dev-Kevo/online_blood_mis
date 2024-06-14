@@ -106,12 +106,6 @@ def patient_update_info(request):
     
     return render(request, 'core/patients_update_info.html')
 
-def donor_update_info(request):
-    """
-    make sure the donor has updated the required information
-    """
-
-    return render(request, 'donors/donors_update_info.html')
 
 @login_required
 def patients(request):
@@ -127,15 +121,6 @@ def patients(request):
         messages.error(request, 'You are not verified')
    
     return render(request, 'patients/patients.html')
-
-@login_required
-def donors(request):
-    """
-    Donors Dashboard
-    """
-    user = CustomUser.objects.filter(username=request.user)
-    
-    return render(request, 'donors/donor.html')
 
 
 def welcome(request):

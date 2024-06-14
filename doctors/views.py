@@ -1,12 +1,17 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from donors.forms import DonorUpdateForm
-from donors.models import Donor
+from core.notifier import sent_sms
+from doctors.context_manager import notification
+from doctors.models import Doctor, DoctorNotification, DoctorAppointments, AppointmentStatus
+from donors.checkers import is_donor_eligible_to_donate
+from donors.forms import DonorUpdateForm, UpdateDonorAfterDonationForm
+from donors.models import AppointmentStatus, Donations, Donor, DonorAppointment
 from patients.forms import PatientUpdateForm
 from patients.models import Patient
 from django.contrib import messages
+from datetime import date
 
 
 
@@ -21,30 +26,39 @@ def index(request):
     donors = Donor.objects.count()
     patients = Patient.objects.count()
     total_donations  = Donor.get_total_donations()
+    no_notification = DoctorNotification.objects.filter(is_read=False).count()
 
 
     context = {
         "donors" : donors,
         "patients" : patients,
         "total_donations" : total_donations,
+        "no_notification" : no_notification
     }
     
     return render(request, 'doctors/doctors.html', context)
 
+@login_required
+def read_notification(request, pk):
+    notification(request, pk)
+    return HttpResponse({"Message" : "Notification Read success"})
+
+@login_required
 def donor_management(request):
     """
     A view that will list all the Registered Donors
     """
 
     donors = Donor.objects.all()
+    print(donors)
 
     context = {
         "donors" : donors,
-       
     }
 
     return render(request, 'doctors/donor_list.html', context)
 
+@login_required
 def donor_details(request, pk):
     """
     Access Donors Information and modify if needed
@@ -70,7 +84,7 @@ def donor_details(request, pk):
 
     return render(request, 'doctors/donor_details.html', context)
 
-
+@login_required
 def patient_management(request):
     """
     A view that will list all the Registered Patients
@@ -85,7 +99,7 @@ def patient_management(request):
 
     return render(request, 'doctors/patient_list.html', context)
 
-
+@login_required
 def patient_details(request, pk):
     """
     Access Patient's Information and modify if needed.
@@ -111,7 +125,111 @@ def patient_details(request, pk):
 
     return render(request, 'doctors/patient_details.html', context)
 
+@login_required
 def doctor_settings(request):
     context = {}
     
     return render(request, 'doctors/settings.html',context)
+
+@login_required
+def appointments(request):
+    user = request.user
+    doctor = Doctor.objects.get(user=user)
+    appointments = DoctorAppointments.objects.filter(doctor=doctor)
+
+    completed_appointments = DoctorAppointments.objects.filter(doctor=doctor, status='COMPLETED').count()
+    pending_appointments = DoctorAppointments.objects.filter(doctor=doctor, status='PENDING').count()
+
+
+    context = {
+        'appointments' : appointments, 
+        'completed_appointments' : completed_appointments,
+        'pending_appointments' : pending_appointments,
+    }
+    
+    return render(request, 'doctors/apointments.html',context)
+
+@login_required
+def appointment_attendance(request, pk):
+
+    user = request.user
+    doctor = Doctor.objects.get(user=user)
+    donor_update_form = UpdateDonorAfterDonationForm()
+    appointment = get_object_or_404(DoctorAppointments, pk=pk)
+    donor = appointment.donor
+    donor_appointment = DonorAppointment.objects.get(donor=donor.user, date=appointment.date, status='PENDING')
+
+    
+
+    bye_msg= f'{doctor} would like to thank you on behalf of Avenue Hospital for donating blood, we look forward seeing you again, have a wonderful time!.'
+    donor_number = str(appointment.donor.phone_number)
+    cleaned_donor_phone_number = '+254'+ donor_number.split('0', maxsplit=1)[1] 
+
+    if request.method == 'POST':
+        donor_update_form = UpdateDonorAfterDonationForm(request.POST, instance=donor)
+        
+        if donor_update_form.is_valid():
+
+            amount_of_donation = donor_update_form.cleaned_data['amount_of_donation']
+            
+            # create donations ---> for the purpose of reports
+            donations = Donations.objects.create(
+                donor = donor.user,
+                amount = amount_of_donation,
+                beneficiary = donor_appointment.beneficiary,
+                description = f'Donation to {donor_appointment.beneficiary}'
+            )
+
+            donations.save()
+
+            # update donor.number_of_donations
+            donor.update_no_of_donations()
+            
+            # upadate if the donor is eligible to donate for the next donation
+            donor.is_eligible_to_donate = is_donor_eligible_to_donate(donor.pk)
+
+            # update donor.last_donation_date
+            donor.update_last_donation_date(date.today())
+            donor.save()
+            donor_update_form.save()
+
+            # update the donor apointment status 
+            donor_appointment.status =  AppointmentStatus.COMPLETED 
+            donor_appointment.save()
+
+            # update the Doctors apointment status 
+            appointment.status = AppointmentStatus.COMPLETED
+            appointment.save()
+
+            return redirect('doc_appointments')
+            
+    
+    else:
+        donor_update_form = UpdateDonorAfterDonationForm(instance=donor)
+
+
+
+    context = {
+        'appointment' : appointment,
+        'donor_update_form' : donor_update_form,
+        'donor_appointment' : donor_appointment,
+    }
+    
+    return render(request, 'doctors/apointment_attendance.html',context)
+
+
+def appointment_details(request, pk):
+    appointment = get_object_or_404(DoctorAppointments, pk=pk)
+    donor = Donor.objects.get(user=appointment.donor.user)
+    donor_appointment = DonorAppointment.objects.get(donor=donor.user, date=appointment.date)
+    
+    print(donor_appointment.beneficiary)
+
+    context = {
+        'appointment' : appointment,
+        'donor' : donor,
+        'donor_appointment' : donor_appointment,
+        
+    }
+
+    return render(request, 'doctors/appointment_detail.html', context)

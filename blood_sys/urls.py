@@ -24,6 +24,7 @@ urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls')),
     path('', include('core.urls')),
     path('doctor/', include('doctors.urls')),
+    path('donors/', include('donors.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
     
 ]

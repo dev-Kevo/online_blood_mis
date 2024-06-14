@@ -1,45 +1,136 @@
-{% load static %}
+{% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Dashboard</title>
-    <!-- CSS stylesheets and other head elements here -->
-    <link rel="stylesheet" href="{% static 'css/doctors.css' %}">
+    <title>Donor Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% tailwind_css %}
 </head>
-<body>
-    <div class="container">
-      <div class="sidebar">
-        <h1>Donors Dashboard</h1>
-        <div class="profile">
-          <img src="#" alt="donor">
-          <p>{{request.user}} | Donor</p>
-        </div>
-        <!-- Add any additional header elements or navigation here -->
-        <ul>
-          <li><a href="#">Overview</a></li> 
-          <li><a href="#">Appointments</a></li>
-          <li><a href="#">Reports</a></li>  
-          <li><a href="#">Profile</a></li>  
-          <li><a href="#">ck</a></li>
-        </ul>
-        <div class="additional">
-          <button class="btn">Settings</button>
-          <button class="btn"><a href="{% url 'logout' %}">Logout</a></button>
-        </div>
-    </div>
-    <div class="content">
-      <h1>Some content goes here</h1>  <footer class="footer">
-        <div class="message">
-            <p>&copy; 2024 Made with love by kevo. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
-    </div>
+<body class="bg-gray-100">
 
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-blue-900 text-white flex flex-col">
+            <div class="p-4">
+                <h1 class="text-2xl font-bold">Donors Dashboard</h1>
+                <div class="mt-4 flex flex-col items-center justify-center">
+                    <img class="w-24 h-24 rounded-full" src="{{donor.get_profile_pic}}" alt="donor">
+                    <div class="ml-4">
+                        <p>{{ request.user }}</p>
+                        <p class="text-sm">Donor</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="mt-6 flex-1">
+                <ul>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'donor_dashboard' %}">Overview</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'donor_update_info' donor.id %}">Profile</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'appointments' %}">Appointments</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="#">Reports</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="#">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="p-4">
+                <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 p-6">
+          <h1 class="text-3xl font-bold mb-6">Overview</h1>
+
+          {% if messages %}
+          {% for message in messages %}
+          <div class="p-4 mb-4 text-sm text-blue-800 text-center rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+            <span class="font-medium">{{message}}</span>
+          </div>
+          {% endfor %}
+        {% endif %}
+
+          <!-- Welcome Message -->
+          <div class="mb-6 p-4 bg-white rounded-lg shadow-md">
+              <h2 class="text-xl font-bold">Welcome, {{ request.user.username }}!</h2>
+              <p class="mt-2">Thank you for your continuous support. Here's a summary of your recent activities and contributions.</p>
+          </div>
+
+          <!-- Summary of Contributions -->
+          <div class="mb-6 p-4 bg-white rounded-lg shadow-md">
+              <h2 class="text-xl font-bold">Your Contributions</h2>
+              <p class="mt-2">Total Donated: Ksh. {{ total_donated_amount }}</p>
+              <p class="mt-2">Number of Donations: {{ total_donations }}</p>
+              <div class="mt-4">
+                  <h3 class="text-lg font-semibold">Recent Donations</h3>
+                  <ul class="mt-2">
+                      {% for donation in recent_donations %}
+                          <li class="py-2 border-b">{{ donation.created }} - Ksh. {{ donation.amount }} to {{ donation.beneficiary }}</li>
+                      {% endfor %}
+                  </ul>
+              </div>
+          </div>
+
+          <!-- Upcoming Appointments -->
+          <div class="mb-6 p-4 bg-white rounded-lg shadow-md">
+              <h2 class="text-xl font-bold">Upcoming Appointments</h2>
+              <ul class="mt-2">
+                  {% for appointment in upcoming_appointments %}
+                      <li class="py-2 border-b">{{ appointment.date }} - Donate to {{ appointment.beneficiary }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+
+
+
+          <!-- Call to Action -->
+          <div class="mb-6 p-4 bg-white rounded-lg shadow-md">
+            <!-- Modal toggle -->
+            <button data-modal-target="static-modal" data-modal-toggle="static-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+              Book An Appointment
+            </button>
+
+            <!-- Main modal -->
+            <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative p-4 w-full max-w-2xl max-h-full">
+                    <!-- Modal content -->
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                Book An Appointment
+                            </h3>
+                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="p-4 md:p-5 space-y-4">
+                            <form action="" method="post">
+                              {% csrf_token %}
+                              {{appointment_form}}
+                              <button type="submit" class="focus:outline-none mt-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Book</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+          </div>
+        </div>
+  </div>
+
+    </div>
 
     <!-- JavaScript files and other scripts here -->
-
+    <script src="{% static 'js/flowbite.min.js' %}"></script>
+  </body>
 </body>
 </html>

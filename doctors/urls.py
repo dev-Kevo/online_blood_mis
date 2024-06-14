@@ -10,4 +10,8 @@ urlpatterns = [
     path('patient_management/<int:pk>/', views.patient_details, name='patient_details'),
 
     path('settings/', views.doctor_settings, name='doctor_settings'),
+    path('appointments/', views.appointments, name='doc_appointments'),
+    path('appointment/attend/<int:pk>/', views.appointment_attendance, name='appointment_attendance'),
+    path('appointment/details/<int:pk>/', views.appointment_details, name='appointment_details'),
+    path('read/<int:pk>/', views.read_notification, name='read_notification'),
 ]

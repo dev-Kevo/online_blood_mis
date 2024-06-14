@@ -1,11 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
+
 
 {% block title %}
   Dashboard
 {% endblock title %}
 
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/update.css' %}">
+{% endblock head %}
+
+
 {% block content %}
   <div class="container mx-auto mt-20 mb-20 p-5 bg-gray-100">
     <h1>Dear Donor Update Personal informatiom</h1>
+     <form method="post" class="md:w-96 lg:w-96 mx-auto">
+      {% csrf_token %}
+      {{update_form}}
+      <button type="submit" class="bg-cyan-500 py-2 px-4 mt-5 rounded text-white">Update</button>
+     </form>
   </div>
 {% endblock content %}
