@@ -11,12 +11,45 @@
 {% block content %}
 <div class="container mx-auto p-5 md:p-10">
     <div class="title">
-        <h1 class="text-2xl font-bold">Appointment Details</h1>
+        <h1 class="text-2xl font-bold">Appointment from {{appointment.donor.user}}</h1>
     </div>
     <div class="content mt-5 md:mt-10"> 
-        <div class="flex justify-between mb-10">
-            <h2 class="font-bold">Appointment from {{appointment.donor.user}}</h2>
-            <p>Appointment status: {{appointment.status}}</p>
+        <div class="flex flex-col justify-between mb-10">
+            <div class="top flex justify-between mb-10">
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-200 dark:bg-gray-800 dark:text-green-400" role="alert">
+                    <span class="font-medium">Appointment status: {{appointment.status}}</span>
+                  </div>
+            </div>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            </div>
+            <table class="w-full text-sm text-left rounded text-gray-500 dark:text-gray-400">
+                <tbody>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Appointment Date
+                        </td>
+                        <td class="px-6 py-4">
+                            {{donor_appointment.date}}
+                        </td>
+                    </tr>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Amount
+                        </td>
+                        <td class="px-6 py-4">
+                            {{donation_amount}}
+                        </td>
+                    </tr>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Beneficiary
+                        </td>
+                        <td class="px-6 py-4">
+                            {{donor_appointment.beneficiary}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
       
                

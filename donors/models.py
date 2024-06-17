@@ -148,7 +148,18 @@ class Impact(models.Model):
     def __str__(self):
         return f"Impact for {self.donor}"
 
-    
+
+class DonorSettings(models.Model):
+    donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='donor_settings')
+    email_notifications = models.BooleanField(default=True)
+    sms_notifications = models.BooleanField(default=True)
+    push_notifications = models.BooleanField(default=True)
+    default_notification_method = models.CharField(max_length=255, default=Preffered_Contact_Method.EMAIL, choices=Preffered_Contact_Method)
+    created = models.DateField(auto_now=True, null=True, blank=True)
+    modified = models.DateField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return f"Settings for {self.donor}"   
 
 
     

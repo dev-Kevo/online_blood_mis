@@ -3,17 +3,24 @@
 
 
 {% block title %}
-  Dashboard
+  Update Info
 {% endblock title %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/update.css' %}">
+  <link rel="stylesheet" href="{% static 'donor/css/update.css' %}">
 {% endblock head %}
 
 
 {% block content %}
   <div class="container mx-auto mt-20 mb-20 p-5 bg-gray-100">
-    <h1>Dear Donor Update Personal informatiom</h1>
+    <h1>Dear {{donor | title }} update personal information</h1>
+    {% if messages %}
+      {% for message in messages %} 
+        <div class="p-4 mb-4 text-sm text-center text-red-800 rounded-lg bg-red-100 dark:bg-red-800 dark:text-red-400" role="alert">
+          <span class="font-medium">{{message}}</span> 
+        </div>
+      {% endfor %}
+    {% endif %}
      <form method="post" class="md:w-96 lg:w-96 mx-auto">
       {% csrf_token %}
       {{update_form}}

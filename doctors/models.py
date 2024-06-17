@@ -4,6 +4,10 @@ from donors.models import Donor
 from patients.models import Patient
 
 
+class Preffered_Contact_Method(models.TextChoices):
+    EMAIL = 'email', 'Email'
+    PHONENUMBER = 'phonenumber', 'Phonenumber'
+
 class AppointmentStatus(models.TextChoices):
     PENDING = 'PENDING', 'PENDING'
     ATTENTED = 'COMPLETED', 'COMPLETED'
@@ -52,8 +56,7 @@ class Doctor(models.Model):
         else:
             self.no_appointments -= 1
             print(f'Successfully REMOVED 1 from {self.user}"s Apointments ')
-
-        
+    
     def __str__(self):
         return f"Dr. {self.user.username} ({self.specialty})"
 
@@ -83,4 +86,21 @@ class DoctorNotification(models.Model):
 
     def __str__(self) -> str:
         return f'Notification: {self.message}'
+    
+
+class DoctorSettings(models.Model):
+    doctor = models.OneToOneField(Doctor, on_delete=models.CASCADE)
+    email_notifications = models.BooleanField(default=True)
+    sms_notifications = models.BooleanField(default=True)
+    push_notifications = models.BooleanField(default=True)
+    default_notification_method = models.CharField(max_length=255, default=Preffered_Contact_Method.EMAIL, choices=Preffered_Contact_Method)
+    created = models.DateField(auto_now=True, null=True, blank=True)
+    modified = models.DateField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.doctor.user.username} Settings'
+
+    class Meta:
+        verbose_name = "Doctor Settings"
+        verbose_name_plural = "Doctor Settings"
 

@@ -1,7 +1,7 @@
 
 from django import forms
 from django.forms import ModelForm
-from donors.models import DonorAppointment, Donor
+from donors.models import DonorAppointment, Donor, DonorSettings
 from django.core.exceptions import ValidationError
 from datetime import datetime, time
 
@@ -50,7 +50,6 @@ class DonorUpdateForm(ModelForm):
             'blood_group',
             'phone_number',
             'donation_location',
-            'preferred_contact_method',
             'type_donation',
             'address',
             'weight_kg',
@@ -68,8 +67,6 @@ class DonorUpdateForm(ModelForm):
             'phone_number': forms.TextInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
             
             'donation_location': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
-            
-            'preferred_contact_method': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
             
             'type_donation': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
             
@@ -127,4 +124,23 @@ class UpdateDonorAfterDonationForm(forms.ModelForm):
 
         }
 
+class DonorSettingsForm(forms.ModelForm):
+    class Meta:
+        model = DonorSettings
+        fields = [
+            'email_notifications',
+            'sms_notifications',
+            'default_notification_method',
+            'push_notifications',
+            ]
 
+        
+        widgets = {
+            'email_notifications': forms.CheckboxInput(attrs={'class': 'form-checkbox h-5 w-5 text-indigo-600 mb-5 flex items-center'}),
+
+            'sms_notifications': forms.CheckboxInput(attrs={'class': 'form-checkbox h-5 w-5 text-indigo-600 mb-5 flex items-center'}),
+
+            'default_notification_method': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 mb-5 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
+            
+            'push_notifications': forms.CheckboxInput(attrs={'class': 'form-checkbox h-5 w-5 text-indigo-600 mb-5 flex flex-row items-center'}),
+        }

@@ -6,15 +6,18 @@ from django.contrib import messages
 
 def context(request):
     user = request.user
-    doctor = Doctor.objects.get(user=user)
-    no_notification = DoctorNotification.objects.filter(doctor=doctor, is_read=False).count()
-    notification_messages = DoctorNotification.objects.filter(doctor=doctor,is_read=False)
-    
+    doctor = None
+    no_notification = 0
+    notification_messages = []
+
+    if user.is_authenticated and user.is_doctor:
+        doctor = Doctor.objects.get(user=user)
+        no_notification = DoctorNotification.objects.filter(doctor=doctor, is_read=False).count()
+        notification_messages = DoctorNotification.objects.filter(doctor=doctor, is_read=False)
 
     context = {
-
-        'no_notification' : no_notification,
-        'notification_messages' : notification_messages,
+        'no_notification': no_notification,
+        'notification_messages': notification_messages,
     }
 
     return context

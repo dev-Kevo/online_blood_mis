@@ -169,7 +169,7 @@
                 :class="{ 'text-indigo-500 dark:text-indigo-400': selected == 4 }"
                 @click="selected !== 4 ? selected = 4 : selected = null"
                 class="[&.active]:text-indigo-500 dark:[&.active]:text-indigo-400 block py-2.5 px-6 hover:text-indigo-500 dark:hover:text-indigo-400"
-                href="#"
+                href="{% url 'blood_inventory' %}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +193,7 @@
             <li>
               <a
                 class="[&.active]:text-indigo-500 dark:[&.active]:text-indigo-400 block py-2.5 px-6 hover:text-indigo-500 dark:hover:text-indigo-400"
-                href="#"
+                href="{% url 'donation_records' %}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -219,7 +219,7 @@
                 :class="{ 'text-indigo-500 dark:text-indigo-400': selected == 5 }"
                 @click="selected !== 5 ? selected = 5 : selected = null"
                 class="[&.active]:text-indigo-500 dark:[&.active]:text-indigo-400 block py-2.5 px-6 hover:text-indigo-500 dark:hover:text-indigo-400"
-                href="javascript:;"
+                href="{% url 'reports' %}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -881,7 +881,7 @@
                 <li class="relative">
                   <a
                     class="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500"
-                    href="#"
+                    href="{% url 'doctor_settings'  %}"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

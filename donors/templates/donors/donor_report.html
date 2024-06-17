@@ -1,0 +1,38 @@
+{% extends "donor_base.html" %}
+
+{% block title %}
+  Reports
+{% endblock title %}
+
+{% block content %}
+    <!-- Main content -->
+    <div class="flex-1 p-6">
+        <h1 class="text-3xl font-bold mb-6">Donation Report</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="p-4 mb-4 text-sm text-blue-800 text-center rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+            <span class="font-medium">{{message}}</span>
+            </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="container mx-auto">
+            {% if donations %}
+              {% for donation in donations %}
+                <p>Donation to: {{donation.beneficiary}}</p>
+              {% endfor %}
+            {% else %}
+                <p>No donations found</p>
+            {% endif %}
+        </div>
+     
+   
+    
+
+
+
+
+        </div>
+    </div>
+{% endblock content %}

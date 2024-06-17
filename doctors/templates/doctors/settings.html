@@ -1,11 +1,22 @@
 {% extends "doctors_base.html" %}
 
-{% block title %}
-  Settings
-{% endblock title %}
+{% block title %} Donors List {% endblock title %}
 
 {% block content %}
-  <div class="container mx-auto mt-5">
-    <h1>Settings</h1>
-  </div>
+    <div class="container mx-auto p-5 md:p-10">
+        <div class="title">
+            <h1 class="text-2xl font-bold">Settings</h1>
+        </div>
+        <div class="message bg-green-200 text-center rounded">
+      </div>
+        <div class="content mt-5 md:mt-10">
+           <form method="post">
+            {% csrf_token %}
+            {{setting_form}}
+              <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button data-modal-hide="static-modal" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</button>
+              </div>
+           </form>
+        </div>
+    </div>
 {% endblock content %}

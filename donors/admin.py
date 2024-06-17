@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Donor, Donations, DonorAppointment, Notification, Impact
+from .models import Donor, Donations, DonorAppointment, Notification, Impact, DonorSettings
 
 # Register your models here.
 
@@ -47,3 +47,9 @@ class DonorAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(DonorSettings)
+class DonorSettingsAdmin(admin.ModelAdmin):
+    list_display = [
+        'donor',
+        'default_notification_method',
+    ]
