@@ -1,0 +1,26 @@
+{% extends "patients_base.html" %}
+
+{% block title %}
+  Settings
+{% endblock title %}
+
+{% block content %}
+    <!-- Main content -->
+    <div class="flex-1 p-6">
+        <h1 class="text-3xl font-bold mb-6">Settings</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 mb-4 text-sm text-blue-800 text-center rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                <span class="font-medium">{{message}}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+        
+        <!-- Call to Action -->
+        <div class="mb-6 p-4">
+        </div>
+    </div>
+{% endblock content %}

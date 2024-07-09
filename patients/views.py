@@ -94,7 +94,8 @@ def patients(request):
     else:
         messages.error(request, "Please update your information to continue.")
         return redirect('patient_update_info')
-   
+
+@login_required  
 def patient_update_info(request):
     """
     make sure the patient has updated the required information
@@ -127,6 +128,7 @@ def patient_update_info(request):
     
     return render(request, 'patients/patient_update_info.html', context)
 
+@login_required
 def patient_appointments(request):
     """
     List of all appointments
@@ -194,3 +196,41 @@ def patient_appointments(request):
     }
 
     return render(request, 'patients/patient_appointments.html', context)
+
+
+@login_required
+def profile(request):
+    """
+    Patient profile
+    """
+    user = request.user
+    patient = Patient.objects.get(user=user)
+    context = {
+        'patient': patient
+    }
+    return render(request, 'patients/profile.html', context)
+
+
+@login_required
+def settings(request):
+    """
+    Patient settings
+    """
+    user = request.user
+    patient = Patient.objects.get(user=user)
+    context = {
+        'patient': patient
+    }
+    return render(request, 'patients/settings.html', context)
+
+@login_required
+def reports(request):
+    """
+    Patient reports
+    """
+    user = request.user
+    patient = Patient.objects.get(user=user)
+    context = {
+        'patient': patient
+    }
+    return render(request, 'patients/reports.html', context)

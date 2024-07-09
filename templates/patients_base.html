@@ -27,10 +27,10 @@
             <nav class="mt-6 flex-1">
                 <ul>
                     <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'patient_dashboard' %}">Overview</a></li>
-                    <li class="px-4 py-2 hover:bg-blue-700"><a href="#">Profile</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'patient_profile' %}">Profile</a></li>
                     <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'patient_appointments' %}">Appointments</a></li>
-                    <li class="px-4 py-2 hover:bg-blue-700"><a href="#">Reports</a></li>
-                    <li class="px-4 py-2 hover:bg-blue-700"><a href="#">Settings</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'patient_reports' %}">Reports</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'patient_settings' %}">Settings</a></li>
                 </ul>
             </nav>
             <div class="p-4">
