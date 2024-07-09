@@ -28,11 +28,7 @@ body{
     height: 100vh;
 }
 
-.container{
-    display: flex;
-    height: 100%;
 
-}
 
 .sidebar{
     background-color: #020d15;
@@ -104,4 +100,10 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#id_amount_of_blood_used_helptext{
+    color: red;
+    font-size: x-small;
+    font-style: italic;
 }

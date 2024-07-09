@@ -15,8 +15,7 @@ class AppointmentStatus(models.TextChoices):
 
 class AppointmentsFromChoices(models.TextChoices):
     DONOR = 'DONOR', 'DONOR'
-    PATIENT = 'PATIENT', 'PATIENT'
-    
+    PATIENT = 'PATIENT', 'PATIENT'   
 
 class Doctor(models.Model):
 
@@ -52,10 +51,10 @@ class Doctor(models.Model):
         """
         if state == 'add':
             self.no_appointments += 1
-            print(f'Successfully added 1 to {self.user}"s Apointments ')
+            
         else:
             self.no_appointments -= 1
-            print(f'Successfully REMOVED 1 from {self.user}"s Apointments ')
+            
     
     def __str__(self):
         return f"Dr. {self.user.username} ({self.specialty})"
@@ -63,7 +62,6 @@ class Doctor(models.Model):
     class Meta:
         verbose_name = "Doctor"
         verbose_name_plural = "Doctors"
-
 
 class DoctorAppointments(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
@@ -87,7 +85,6 @@ class DoctorNotification(models.Model):
     def __str__(self) -> str:
         return f'Notification: {self.message}'
     
-
 class DoctorSettings(models.Model):
     doctor = models.OneToOneField(Doctor, on_delete=models.CASCADE)
     email_notifications = models.BooleanField(default=True)
@@ -104,3 +101,29 @@ class DoctorSettings(models.Model):
         verbose_name = "Doctor Settings"
         verbose_name_plural = "Doctor Settings"
 
+class BloodInventory(models.Model):
+
+    class BloodGroup(models.TextChoices):
+        A_POS = 'A+', 'A+'
+        A_NEG = 'A-', 'A-'
+        B_POS = 'B+', 'B+'
+        B_NEG = 'B-', 'B-'
+        AB_POS = 'AB+', 'AB+'
+        AB_NEG = 'AB-', 'AB-'
+        O_POS = 'O+', 'O+'
+        O_NEG = 'O-', 'O-'
+        UNKNOWN = 'UNKNOWN', 'UNKNOWN'
+
+    blood_group = models.CharField(max_length=10, choices=BloodGroup.choices)
+    quantity_ml = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    expiry_date = models.DateField()
+    created = models.DateField(auto_now=True, null=True, blank=True)
+    modified = models.DateField(auto_now_add=True, null=True, blank=True)
+
+
+    class Meta:
+        verbose_name = "Blood Inventory"
+        verbose_name_plural = "Blood Inventory"
+
+    def __str__(self):
+        return f"{self.get_blood_group_display()}: {self.quantity_ml} ml"

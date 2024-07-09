@@ -95,10 +95,10 @@ class Donor(models.Model):
     def __str__(self) -> str:
         return self.user.username
     
-
-class Donations(models.Model):
+class DonorDonations(models.Model):
     donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    blood_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text="Amount of blood donated in ml")
     beneficiary = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     created = models.DateField(auto_now=True, null=True, blank=True)
@@ -108,7 +108,6 @@ class Donations(models.Model):
 
         return f"Donation by {self.donor} on {self.created}"
     
-
 class DonorAppointment(models.Model):
     donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='donor_appointment')
     date = models.DateField()
@@ -125,7 +124,6 @@ class DonorAppointment(models.Model):
     def __str__(self):
         return f"Appointment for {self.donor} on {self.date} at {self.time}"
     
-
 class Notification(models.Model):
     donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
@@ -136,7 +134,6 @@ class Notification(models.Model):
     def __str__(self):
         return f"Notification for {self.donor} - {self.message[:20]}"
     
-
 class Impact(models.Model):
     donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     people_helped = models.IntegerField()

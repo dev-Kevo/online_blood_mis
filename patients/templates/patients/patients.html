@@ -1,45 +1,102 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Dashboard</title>
-    <!-- CSS stylesheets and other head elements here -->
-    <link rel="stylesheet" href="{% static 'css/doctors.css' %}">
-</head>
-<body>
-    <div class="container">
-      <div class="sidebar">
-        <h1>Patients Dashboard</h1>
-        <div class="profile">
-          <img src="#" alt="patient">
-          <p>{{request.user}} | Patient</p>
+{% extends "patients_base.html" %}
+
+{% block title %}
+  Dashboard
+{% endblock title %}
+
+{% block content %}
+    <!-- Main content -->
+    <div class="flex-1 p-6">
+        <h1 class="text-3xl font-bold mb-6">Overview</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 mb-4 text-sm text-blue-800 text-center rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                <span class="font-medium">{{message}}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Welcome Message -->
+        <div class="mb-6 p-4 bg-white rounded-lg shadow-md">
+            <h2 class="text-xl font-bold">Welcome, {{ request.user.username }}!</h2>
+            <p class="mt-2">Here's a summary of your recent activities.     </p>
         </div>
-        <!-- Add any additional header elements or navigation here -->
-        <ul>
-          <li><a href="#">Overview</a></li>  <!-- Display key statistics and notifications here -->
-          <li><a href="#">Appointments</a></li> <!-- Display current stock, alerts, and request options -->
-          <li><a href="#">Reports</a></li>  <!-- Display donor information, search, and filtering options -->
-          <li><a href="#">Profile</a></li>  <!-- Display patient information and status updates -->
-          <li><a href="#">Patient</a></li> <!-- Display calendar view and scheduling options -->
-        </ul>
-        <div class="additional">
-          <button class="btn">Settings</button>
-          <button class="btn"><a href="{% url 'login' %}">Logout</a></button>
+
+        <!-- Summary of Contributions -->
+        <div class="mb-6 p-4 bg-white rounded-lg shadow-md">
+            <h2 class="text-xl font-bold">Summary Report</h2>
+            <p class="mt-2">Total Blood Received (in ml): {{ total_donated_bood }}</p>
+            <p class="mt-2">Number Blood Charge : {{ total_blood_charge }}</p>
+            <div class="mt-4">
+                <h3 class="text-lg font-semibold">Recent Blood Charge</h3>
+                <ul class="mt-2">
+                    {% if recent_donations %}
+                        {% for donation in recent_donations %}
+                            <li class="py-2 border-b">Blood Charge on {{ donation.created }} - {{ donation.amount_of_blood_used }} ml</li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="py-2 bg-green-200 p-2 text-green-600 rounded">No recent Blood Charge</li>
+                    {% endif %}
+                    
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="content">
-      <h1>Some content goes here</h1>  <footer class="footer">
-        <div class="message">
-            <p>&copy; 2024 Made with love by kevo. All rights reserved.</p>
+
+        <!-- Upcoming Appointments -->
+        <div class="mb-6 p-4 bg-white rounded-lg shadow-md">
+            <h2 class="text-xl font-bold">Upcoming Appointments</h2>
+            <ul class="mt-2">
+                {% if upcoming_appointments %}
+                    {% for appointment in upcoming_appointments %}
+                        <li class="py-2 border-b">Charge blood on {{ appointment.date }} at {{ appointment.time | title }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li class="py-2 bg-green-200 p-2 text-green-600 rounded">No upcoming appointments</li>
+                {% endif %}
+                
+            </ul>
         </div>
-      </footer>
-    </div>
-    </div>
 
 
-    <!-- JavaScript files and other scripts here -->
 
-</body>
-</html>
+        <!-- Call to Action -->
+        <div class="mb-6 p-4">
+        <!-- Modal toggle -->
+        <button data-modal-target="static-modal" data-modal-toggle="static-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+            Book An Appointment
+        </button>
+
+        <!-- Main modal -->
+        <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-2xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Book An Appointment
+                        </h3>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            {{appointment_form}}
+                            <button type="submit" class="focus:outline-none mt-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Book</button>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+{% endblock content %}

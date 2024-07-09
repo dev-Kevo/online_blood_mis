@@ -10,8 +10,11 @@ urlpatterns = [
     path('patient_management/<int:pk>/', views.patient_details, name='patient_details'),
 
     path('appointments/', views.appointments, name='doc_appointments'),
-    path('appointment/attend/<int:pk>/', views.appointment_attendance, name='appointment_attendance'),
-    path('appointment/details/<int:pk>/', views.appointment_details, name='appointment_details'),
+    path('appointment/attend_patient/<int:pk>/', views.patient_appointment_attendance, name='patient_appointment_attendance'),
+    path('appointment/patient/details/<int:pk>/', views.patient_appointment_detail, name='patient_appointment_detail'),
+    path('appointment/attend_donor/<int:pk>/', views.donor_appointment_attendance, name='donor_appointment_attendance'),
+    path('appointment/donor/details/<int:pk>/', views.donor_appointment_details, name='donor_appointment_details'),
+    path('appointment/patient/details/<int:pk>/', views.patient_appointment_detail, name='patient_appointment_detail'), # This is a duplicate of the above line
     path('read/<int:pk>/', views.read_notification, name='read_notification'),
     path('blood_inventory/', views.blood_inventory, name='blood_inventory'),
     path('donation_records/', views.donation_records, name='donation_records'),

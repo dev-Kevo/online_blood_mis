@@ -1,0 +1,60 @@
+{% extends "doctors_base.html" %}
+
+{% block title %}
+  Patient Appointment Details
+{% endblock title %}
+
+{% block head %}
+  
+{% endblock head %}
+
+{% block content %}
+<div class="container mx-auto p-5 md:p-10">
+    <div class="title">
+        <h1 class="text-2xl font-bold">Appointment from {{appointment.donor.user}}</h1>
+    </div>
+    <div class="content mt-5 md:mt-10"> 
+        <div class="flex flex-col justify-between mb-10">
+            <div class="top flex justify-between mb-10">
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-200 dark:bg-gray-800 dark:text-green-400" role="alert">
+                    <span class="font-medium">Appointment status: {{appointment.status}}</span>
+                  </div>
+            </div>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            </div>
+            <table class="w-full text-sm text-left rounded text-gray-500 dark:text-gray-400">
+                <tbody>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Appointment Date
+                        </td>
+                        <td class="px-6 py-4">
+                            {{patient_appointment.created}}
+                        </td>
+                    </tr>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Amount of Bloof Used (ml)
+                        </td>
+                        <td class="px-6 py-4">
+                            {{amount_of_blood_used}} ml
+                        </td>
+                    </tr>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Follow Up Date 
+                        </td>
+                        <td class="px-6 py-4">
+                            {{patient_appointment.follow_up_date}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      
+               
+        <a href="{% url 'doc_appointments' %}" class="text-white mt-5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Back</a>
+    
+    </div>
+</div>
+{% endblock content %}

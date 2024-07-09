@@ -115,6 +115,8 @@ class UpdateDonorAfterDonationForm(forms.ModelForm):
         widgets = {
 
             'amount_of_donation': forms.NumberInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
+            
+            'blood_amount': forms.NumberInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
 
             'blood_group': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
 

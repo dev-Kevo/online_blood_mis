@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Donor, Donations, DonorAppointment, Notification, Impact, DonorSettings
+from .models import Donor, DonorDonations, DonorAppointment, Notification, Impact, DonorSettings
 
 # Register your models here.
 
@@ -12,7 +12,7 @@ class DonorAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Donations)
+@admin.register(DonorDonations)
 class DonationsAdmin(admin.ModelAdmin):
     list_display = [
         'donor',

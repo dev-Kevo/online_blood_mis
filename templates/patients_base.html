@@ -1,0 +1,56 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients | {% block title %} {% endblock title %}</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-100">
+
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-blue-900 text-white flex flex-col">
+            <div class="p-4">
+                <h1 class="text-2xl font-bold">Patients Dashboard</h1>
+                <div class="mt-4 flex flex-col items-center justify-center">
+                    <img src='{{patient.get_profile_pic}}' class="w-24 h-24 rounded-full"  alt="patient">
+                    <div class="flex flex-col justify-center items-center">
+                        <p class="text-2xl font-bold">{{ request.user |title }}</p>
+                        <p class="text-sm">Patient</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="mt-6 flex-1">
+                <ul>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'patient_dashboard' %}">Overview</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="#">Profile</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'patient_appointments' %}">Appointments</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="#">Reports</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="#">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="p-4">
+                <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        {% block content %}
+            
+        {% endblock content %}
+        </div>
+  </div>
+
+    </div>
+
+    <!-- JavaScript files and other scripts here -->
+    <script src="{% static 'js/flowbite.min.js' %}"></script>
+  </body>
+</body>
+</html>

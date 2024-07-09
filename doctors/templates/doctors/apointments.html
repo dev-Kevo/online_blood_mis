@@ -61,14 +61,21 @@
                             <td class="px-6 py-4">
                                 {% if appointment.donor %}
                                     {% if appointment.status == 'PENDING' %}
-                                        <a href="{% url 'appointment_attendance' appointment.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{appointment.donor.user | title}} - Donor</a>
+                                        <a href="{% url 'donor_appointment_attendance' appointment.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{appointment.donor.user | title}} - Donor</a>
                                     
                                     {% else %}
-                                        <a href="{% url 'appointment_details' appointment.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{appointment.donor.user | title}} - Donor</a>
+                                        <a href="{% url 'donor_appointment_details' appointment.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{appointment.donor.user | title}} - Donor</a>
                                     {% endif %}
                                 {% else %}
                                 <!-- handle patients redirection -->
-                                    <!-- <a href="{% url 'patient_appointment_details' appointment.patient.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{appointment.patient.user | title}} - Patient</a> -->
+                                    <!-- <a href="{% url 'patient_appointment_detail' appointment.patient.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{appointment.patient.user | title}} - Patient</a> -->
+                                    {% if appointment.status == 'PENDING' %}
+                                      <a href="{% url 'patient_appointment_attendance' appointment.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{appointment.patient.user | title}} - Patient</a>
+                                    {% elif appointment.status == 'COMPLETED' %}
+                                        <a href="{% url 'patient_appointment_detail' appointment.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{appointment.patient.user | title}} - Patient</a>
+                                    {% else %}
+                                        <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Cancled</a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4">

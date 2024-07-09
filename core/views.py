@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
 from donors.models import Donor
 from . models import CustomUser
 from core.forms import LoginForm, RegistrationForm
@@ -40,7 +39,6 @@ def register(request):
         form = RegistrationForm()
 
     return render(request, 'authentication/register.html', {'form': form})
-
 
 
 def login_user(request):
@@ -83,7 +81,6 @@ def login_user(request):
 
     return render(request, 'authentication/login.html', {'form': form})
 
-
 def logout_user(request):
     """
     Log out the user
@@ -98,30 +95,6 @@ def doctor_update_info(request):
     """
 
     return render(request, 'core/doctors_update_info.html')
-
-def patient_update_info(request):
-    """
-    make sure the patient has updated the required information
-    """
-    
-    return render(request, 'core/patients_update_info.html')
-
-
-@login_required
-def patients(request):
-    """
-    Patients Dashboard
-    """
-    user = request.user
-    if user == "AnonymousUser":
-        return redirect('login')
-    if user.is_verified:
-        messages.success(request, "Verified Successfully")
-    else:
-        messages.error(request, 'You are not verified')
-   
-    return render(request, 'patients/patients.html')
-
 
 def welcome(request):
     """
