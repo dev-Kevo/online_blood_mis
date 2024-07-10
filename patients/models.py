@@ -1,7 +1,14 @@
 from django.db import models
 from django.conf import  settings
 
+class Preffered_Contact_Method(models.TextChoices):
+    EMAIL = 'email', 'Email'
+    PHONENUMBER = 'phonenumber', 'Phonenumber'
 
+class GenderSelect(models.TextChoices):
+        MALE = 'male', 'Male'
+        FEMALE = 'female', 'Female',
+        OTHER = 'other', 'Other'
 
 class AppointmentStatus(models.TextChoices):
     PENDING = 'PENDING', 'PENDING'
@@ -35,7 +42,9 @@ class Patient(models.Model):
     phone_number = models.CharField(max_length=12, null=True, blank=True)
     medical_record_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=12, choices=GenderSelect, null=True, blank=True)
     blood_group = models.CharField(max_length=10, choices=BloodGroup, blank=True, default=BloodGroup.UNKNOWN)
+    address = models.CharField(max_length=200, blank=True)
     medical_conditions = models.TextField(blank=True, null=True)
     weight_kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     update_last_blood_charge_date = models.DateField(blank=True, null=True)
@@ -75,7 +84,7 @@ class PatientAppointment(models.Model):
     
 class PatientDonations(models.Model):
     patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='patient_donations')
-    amount_of_blood_used = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Amount of blood donated in ml")
+    amount_of_blood_used = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Amount of blood Used (Bags)")
     treatment_notes = models.TextField(blank=True, null=True)
     follow_up_date = models.DateField(blank=True, null=True)
     created = models.DateField(auto_now=True, null=True, blank=True)
@@ -88,3 +97,15 @@ class PatientDonations(models.Model):
 
     def __str__(self):
         return f"Blood Recharge by {self.patient} on {self.created}"  
+
+class PatientSettings(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='patient_settings')
+    email_notifications = models.BooleanField(default=True)
+    sms_notifications = models.BooleanField(default=True)
+    push_notifications = models.BooleanField(default=True)
+    default_notification_method = models.CharField(max_length=255, default=Preffered_Contact_Method.EMAIL, choices=Preffered_Contact_Method)
+    created = models.DateField(auto_now=True, null=True, blank=True)
+    modified = models.DateField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return f"Settings for {self.patient.user}"   

@@ -27,7 +27,7 @@
             <nav class="mt-6 flex-1">
                 <ul>
                     <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'donor_dashboard' %}">Overview</a></li>
-                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'donor_update_info' donor.id %}">Profile</a></li>
+                    <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'donor_profile' donor.id %}">Profile</a></li>
                     <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'appointments' %}">Appointments</a></li>
                     <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'donor_reports' %}">Reports</a></li>
                     <li class="px-4 py-2 hover:bg-blue-700"><a href="{% url 'donor_settings' %}">Settings</a></li>

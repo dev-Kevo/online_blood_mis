@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+ Doctor Update Info
+{% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'donor/css/update.css' %}">
+{% endblock head %}
+
+
+{% block content %}
+  <div class="container mx-auto mt-20 mb-20 p-5 bg-gray-100">
+    <h1>Dear {{doctor | title }} update personal information</h1>
+    {% if messages %}
+      {% for message in messages %} 
+        <div class="p-4 mb-4 text-sm text-center text-red-800 rounded-lg bg-red-100 dark:bg-red-800 dark:text-red-400" role="alert">
+          <span class="font-medium">{{message}}</span> 
+        </div>
+      {% endfor %}
+    {% endif %}
+     <form method="post" class="md:w-96 lg:w-96 mx-auto">
+      {% csrf_token %}
+      {{update_form}}
+      <button type="submit" class="bg-cyan-500 py-2 px-4 mt-5 rounded text-white">Update</button>
+     </form>
+  </div>
+{% endblock content %}

@@ -102,8 +102,24 @@ footer {
     justify-content: center;
 }
 
-#id_amount_of_blood_used_helptext{
+#id_amount_of_blood_used_helptext, .helptext{
+    color: #118802;
+    font-size: x-small;
+    font-style: italic;
+    background-color: #8affbd;
+    padding: 2px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.errorlist li{
     color: red;
     font-size: x-small;
     font-style: italic;
+    background-color: #fccece;
+    padding: 4px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border-left: 4px solid red;
 }
+

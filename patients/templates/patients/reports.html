@@ -17,10 +17,57 @@ Reports
             {% endfor %}
         {% endif %}
 
-
-        
         <!-- Call to Action -->
-        <div class="mb-6 p-4">
+        <div class="mb-6 p-1">
+            {% if reports %}
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <table class="w-full text-sm text-left rounded text-gray-500 dark:text-gray-400">
+                  <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                          <th scope="col" class="px-6 py-3">
+                              #
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                            Amount of Blood used (in Bags)
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                              Follow up Date
+                          </th>
+                          
+                          <th scope="col" class="px-6 py-3">
+                              Donation Date
+                          </th>
+                          
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for report in reports %}
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {{ forloop.counter }}
+                          </th>
+                          <td class="px-6 py-4">
+                              {{report.amount_of_blood_used}} Bags
+                          </td>
+                          <td class="px-6 py-4">
+                              {{report.follow_up_date}}
+                          </td>
+                          
+                          <td class="px-6 py-4">
+                              {{report.created}}
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  
+                  
+                  </tbody>
+              </table>
+          </div>
+      {% else %}
+          <div class="p-4 mb-4 text-sm text-blue-800 text-center rounded-lg bg-blue-100 dark:bg-gray-800 dark:text-blue-400" role="alert">
+              <span class="font-medium">No Reports Found</span>
+          </div>
+        {% endif %} 
         </div>
     </div>
 {% endblock content %}

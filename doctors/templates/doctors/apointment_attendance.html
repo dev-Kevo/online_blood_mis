@@ -1,12 +1,13 @@
 {% extends "doctors_base.html" %}
+{% load static %}
 
 {% block title %}
   Appointments
 {% endblock title %}
 
-{% block head %}
-  
-{% endblock head %}
+{% block head_extras %}
+    <link rel="stylesheet" href="{% static 'css/doctors.css' %}">
+{% endblock head_extras %}
 
 {% block content %}
 <div class="container mx-auto p-5 md:p-10">

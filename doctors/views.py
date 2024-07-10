@@ -3,18 +3,50 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from core.notifier import sent_sms
+from core.models import CustomUser
 from doctors.context_manager import notification
-from doctors.forms import DoctorSettingsForm, PatientDonationUpdateForm
-from doctors.models import Doctor, DoctorNotification, DoctorAppointments, AppointmentStatus, DoctorSettings
+from doctors.forms import DoctorSettingsForm, PatientDonationUpdateForm, UpadateDoctorInfo, DoctorRegistrationForm
+from doctors.models import BloodInventory, Doctor, DoctorNotification, DoctorAppointments, AppointmentStatus, DoctorSettings
 from donors.checkers import is_donor_eligible_to_donate
 from donors.forms import DonorUpdateForm, UpdateDonorAfterDonationForm
 from donors.models import AppointmentStatus, DonorDonations, Donor, DonorAppointment
 from patients.forms import PatientUpdateForm
 from patients.models import Patient, PatientAppointment, PatientDonations
 from django.contrib import messages
-from datetime import date
+from datetime import date, timedelta, datetime
 from .decorators import doctor_required
+from reports.models import Report
 
+
+
+
+def doctor_register(request):
+    register_form = DoctorRegistrationForm()
+    if request.method == 'POST':
+        register_form = DoctorRegistrationForm(request.POST)
+        if register_form.is_valid():
+            username = register_form.cleaned_data['username']
+            email = register_form.cleaned_data['email']
+            password = register_form.cleaned_data['password1']
+
+            doctor = CustomUser.objects.create_user(
+                    username=username,
+                    email=email,
+                    is_doctor = True,
+                    password=password
+            )
+
+            doctor.save()
+            messages.success(request, f'Thank you {username} for signing up')
+            return redirect('login')     
+    else:
+        register_form = DoctorRegistrationForm()
+
+    context = {
+        'register_form' : register_form
+    }
+
+    return render(request, 'doctors/register.html', context)
 
 @doctor_required
 @login_required
@@ -23,16 +55,14 @@ def index(request):
     Doctors Dashboard
     """
     user = request.user
-    print(user.is_doctor)
-    if user.is_doctor == False:
-        messages.error(request, "You are not authorized to view this page")
-        return HttpResponseRedirect(reverse('login'))
+
 
     donors = Donor.objects.count()
     patients = Patient.objects.count()
     total_donations  = Donor.get_total_donations()
     no_notification = DoctorNotification.objects.filter(is_read=False).count()
     no_appointments = DoctorAppointments.objects.filter(status='PENDING').count()
+    no_reports = Report.objects.all().count()
 
 
     context = {
@@ -41,9 +71,41 @@ def index(request):
         "total_donations" : total_donations,
         "no_notification" : no_notification,
         "no_appointments" : no_appointments,
+        "no_reports" : no_reports,
     }
     
     return render(request, 'doctors/doctors.html', context)
+
+@login_required
+def doctor_update_info(request):
+    """
+    make sure the doctor has updated the required information
+    """
+    user = request.user
+    doctor = Doctor.objects.get(user=user)
+
+    update_form = UpadateDoctorInfo()
+    if request.method == 'POST':
+        update_form = UpadateDoctorInfo(request.POST, instance=doctor)
+        if update_form.is_valid():
+            messages.success(request, 'Infomation update success')
+            user.is_verified = True
+            user.save()
+            update_form.save()
+            return redirect('doctors_dashboard')
+        else:
+            messages.error(request, "Failed to update personal information")
+            return redirect('doctor_update_info')
+    else:
+        update_form = UpadateDoctorInfo(instance=doctor)
+
+    context = {
+        'update_form' : update_form,
+        'doctor' : doctor
+    }
+        
+
+    return render(request, 'doctors/doctors_update_info.html', context)
 
 @doctor_required
 @login_required
@@ -186,7 +248,7 @@ def donor_appointment_attendance(request, pk):
             
             # create donor donations ---> for the purpose of reports
             donations = DonorDonations.objects.create(
-                donor = donor.user,
+                donor = donor,
                 amount = amount_of_donation,
                 blood_amount = blood_amount,
                 beneficiary = donor_appointment.beneficiary,
@@ -195,6 +257,16 @@ def donor_appointment_attendance(request, pk):
 
             donations.save()
 
+            # create a bloodInventory istance
+            blood_inventory = BloodInventory.objects.create(
+                donor = donor,
+                quantity = blood_amount,
+                blood_group = donor.blood_group,
+                expiry_date = datetime.now() + timedelta(days=42)
+            )
+
+            blood_inventory.save()
+ 
             # update donor.number_of_donations
             donor.update_no_of_donations()
             
@@ -213,6 +285,9 @@ def donor_appointment_attendance(request, pk):
             # update the Doctors apointment status 
             appointment.status = AppointmentStatus.COMPLETED
             appointment.save()
+
+            #update the number of appointments the doctor have
+            doctor.update_no_appointments('substract')
 
             # clear the doctors notification
             doctor_notification = DoctorNotification.objects.filter(is_read=False).first()
@@ -277,6 +352,9 @@ def patient_appointment_attendance(request, pk):
             appointment.status = AppointmentStatus.COMPLETED
             appointment.save()
 
+            #update the number of appointments the doctor have
+            doctor.update_no_appointments('substract')
+
             # clear the doctors notification
             doctor_notification = DoctorNotification.objects.filter(is_read=False).first()
             doctor_notification.delete()
@@ -299,8 +377,8 @@ def patient_appointment_detail(request, pk):
 
     appointment = get_object_or_404(DoctorAppointments, pk=pk)
     patient = Patient.objects.get(user=appointment.patient.user)
-    patient_appointment = PatientDonations.objects.filter(patient=patient.user, date=appointment.date)[0]
-    donation_amount = PatientDonations.objects.filter(patient=patient.user, created=appointment.modified).last().amount_of_blood_used
+    patient_appointment = PatientDonations.objects.filter(patient=patient, date=appointment.date)[0]
+    donation_amount = PatientDonations.objects.filter(patient=patient, created=appointment.modified).last().amount_of_blood_used
 
     context = {
         'appointment' : appointment,
@@ -318,7 +396,7 @@ def donor_appointment_details(request, pk):
     appointment = get_object_or_404(DoctorAppointments, pk=pk)
     donor = Donor.objects.get(user=appointment.donor.user)
     donor_appointment = DonorAppointment.objects.filter(donor=donor.user, date=appointment.date)[0]
-    donation_amount = DonorDonations.objects.filter(donor=donor.user, created=appointment.modified).last().amount
+    donation_amount = DonorDonations.objects.filter(donor=donor, created=appointment.modified).last().amount
 
     context = {
         'appointment' : appointment,
@@ -350,29 +428,17 @@ def patient_appointment_detail(request, pk):
 @doctor_required
 @login_required
 def blood_inventory(request):
+    """
+    A view that will list all the blood inventory
+    """
+    inventories = BloodInventory.objects.all()
 
-
-    context = {}
+    context = {
+        "inventories" : inventories,
+    }
 
     return render(request, 'doctors/blood_inventory.html', context)
 
-@doctor_required
-@login_required
-def donation_records(request):
-
-
-    context = {}
-
-    return render(request, 'doctors/donation_records.html', context)
-
-@doctor_required
-@login_required
-def reports(request):
-
-
-    context = {}
-
-    return render(request, 'doctors/reports.html', context)
 
 @doctor_required
 @login_required
@@ -402,3 +468,20 @@ def doctor_settings(request):
     }
     
     return render(request, 'doctors/settings.html',context)
+
+@doctor_required
+@login_required
+def langauge_settings(request):
+    """
+    Doctor's Language Settings
+    """
+    return render(request, 'doctors/language_settings.html')
+
+
+@doctor_required
+@login_required
+def help_and_support(request):
+    """
+    Doctor's Help and Support Page
+    """
+    return render(request, 'doctors/help_support.html')

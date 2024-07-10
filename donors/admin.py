@@ -38,13 +38,6 @@ class NotificationAdmin(admin.ModelAdmin):
         'is_read',
     ]
 
-@admin.register(Impact)
-class DonorAdmin(admin.ModelAdmin):
-    list_display = [
-        'donor',
-        'people_helped',
-        'projects_supported',
-    ]
 
 
 @admin.register(DonorSettings)

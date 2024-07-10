@@ -4,8 +4,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from doctors.models import Doctor, DoctorAppointments, DoctorNotification
-from patients.forms import PatientUpdateForm, MakeAppointmentForm
-from patients.models import PatientDonations, Patient, PatientAppointment
+from patients.forms import PatientUpdateForm, MakeAppointmentForm, PatientUpdateProfileForm, PatientSettingsForm
+from patients.models import PatientDonations, Patient, PatientAppointment, PatientSettings
 from django.db.models import Sum
 
 
@@ -16,6 +16,10 @@ def patients(request):
     Patients Dashboard
     """
     user = request.user
+    if not user.is_patient:
+        messages.error(request, "You are not authorized to view this page.")
+        return redirect('login')
+    
     patient = Patient.objects.get(user=user)
     doctors = Doctor.objects.filter(is_available=True)
     recent_donations = PatientDonations.objects.filter(patient=user).order_by('-created')[:5]
@@ -46,11 +50,7 @@ def patients(request):
                     )
                     appointment.save()
 
-                    if selected_doctor.no_appointments >= 20:
-                        selected_doctor.is_available = False
-                        selected_doctor.save()
-                    else:
-                        selected_doctor.is_available = True
+                    if selected_doctor.get_availability_status:
                         doctors_appointment = DoctorAppointments.objects.create(
                             doctor=selected_doctor,
                             patient=patient,
@@ -67,9 +67,11 @@ def patients(request):
                             message=f"{patient} will be donating blood on {date} at {time}"
                         )
                         doctors_notification.save()
-
-                    messages.success(request, "Appointment created successfully. Visit your preferred donation location to donate.")
-                    return redirect('patient_dashboard')
+                        messages.success(request, "Appointment created successfully. Visit your preferred donation location to donate.")
+                        return redirect('patient_dashboard')
+                    else:
+                        messages.error(request, f"No doctors available at the moment, please try again later!")
+                        return redirect('patient_dashboard')
                 else:
                     messages.error(request, "No doctors available at the moment, please try again later!")
                     return redirect('patient_dashboard')
@@ -136,6 +138,7 @@ def patient_appointments(request):
     user = request.user
     appointments = PatientAppointment.objects.filter(patient=user).order_by('-created')
     doctors = Doctor.objects.filter(is_available=True)
+    print(list(doctors))
     patient = Patient.objects.get(user=user)
 
     if request.method == 'POST':
@@ -157,18 +160,18 @@ def patient_appointments(request):
                     )
                     appointment.save()
 
-                    if selected_doctor.no_appointments >= 20:
-                        selected_doctor.is_available = False
-                        selected_doctor.save()
-                    else:
-                        selected_doctor.is_available = True
+                    print(selected_doctor)
+
+                    if selected_doctor.get_availability_status:
                         doctors_appointment = DoctorAppointments.objects.create(
                             doctor=selected_doctor,
                             patient=patient,
                             date=date,
                             time=time
                         )
+
                         doctors_appointment.save()
+
                         selected_doctor.update_no_appointments('add')
                         selected_doctor.save()
 
@@ -179,11 +182,14 @@ def patient_appointments(request):
                         )
                         doctors_notification.save()
 
-                    messages.success(request, "Appointment created successfully. Visit your preferred donation location to donate.")
-                    return redirect('patient_dashboard')
+                        messages.success(request, "Appointment created successfully. Visit your preferred donation location to donate.")
+                        return redirect('patient_dashboard')
+                    else:
+                        messages.error(request, "No doctors available at the moment, please try again later!")
+                        return redirect('patient_dashboard')
                 else:
-                    messages.error(request, "No doctors available at the moment, please try again later!")
-                    return redirect('patient_dashboard')
+                     messages.error(request, "No doctors available at the moment, please try again later!")
+                     return redirect('patient_dashboard')
             else:
                 messages.error(request, "Form submission failed. Please check the form data.")
 
@@ -205,8 +211,23 @@ def profile(request):
     """
     user = request.user
     patient = Patient.objects.get(user=user)
+    profile_form = PatientUpdateProfileForm(instance=patient)
+
+    if request.method == 'POST':
+        profile_form = PatientUpdateProfileForm(request.POST, request.FILES, instance=patient)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect('patient_profile')
+        else:
+            messages.error(request, "Profile update failed. Please check the form data.")
+
+    else:
+        profile_form = PatientUpdateProfileForm(instance=patient)
+
     context = {
-        'patient': patient
+        'patient': patient,
+        'profile_form': profile_form
     }
     return render(request, 'patients/profile.html', context)
 
@@ -218,9 +239,28 @@ def settings(request):
     """
     user = request.user
     patient = Patient.objects.get(user=user)
+    patient_settings = PatientSettings.objects.get(patient=patient)
+
+    settings_form = PatientSettingsForm(instance=patient_settings)
+
+    if request.method == 'POST':
+        settings_form = PatientSettingsForm(request.POST, instance=patient_settings)
+        if settings_form.is_valid():
+            settings_form.save()
+            messages.success(request, "Settings updated successfully.")
+            return redirect('patient_settings')
+        else:
+            messages.error(request, "Settings update failed. Please check the form data.")
+
+    else:
+        settings_form = PatientSettingsForm(instance=patient_settings)
+
+
     context = {
-        'patient': patient
+        'patient': patient,
+        'settings_form': settings_form
     }
+
     return render(request, 'patients/settings.html', context)
 
 @login_required
@@ -230,7 +270,9 @@ def reports(request):
     """
     user = request.user
     patient = Patient.objects.get(user=user)
+    reports = PatientDonations.objects.filter(patient=user).order_by('-created')
     context = {
-        'patient': patient
+        'patient': patient,
+        'reports': reports
     }
     return render(request, 'patients/reports.html', context)

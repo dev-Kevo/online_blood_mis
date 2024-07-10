@@ -45,9 +45,7 @@ def is_donor_eligible_to_donate(donor_pk: int) -> bool:
     weight = check_donors_weight(donor_pk)
     no_of_donation = donor.get_no_of_donations
 
-    if last_donation_date > 10 and weight > 70 and no_of_donation <= 10:
-        
+    if last_donation_date > 10 and weight > 70 and no_of_donation <= 10:    
         return True
-    else:
-        
+    else: 
         return False

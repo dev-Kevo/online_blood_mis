@@ -21,6 +21,6 @@ class AppointmentsAdmin(admin.ModelAdmin):
     list_display = ['doctor','email_notifications', 'sms_notifications', 'push_notifications']
 
 @admin.register(BloodInventory)
-class AppointmentsAdmin(admin.ModelAdmin):
-    list_display = ['blood_group', 'quantity_ml', 'expiry_date']
+class BloodInventoryAdmin(admin.ModelAdmin):
+    list_display = ['donor','blood_group', 'quantity', 'expiry_date']
     list_filter = ['blood_group']

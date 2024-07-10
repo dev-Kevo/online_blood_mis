@@ -2,12 +2,13 @@ from django.db import models
 from django.db.models import Sum
 from core.models import CustomUser
 from django.conf import settings
-
+from datetime import datetime
 
 
 class GenderSelect(models.TextChoices):
         MALE = 'male', 'Male'
-        FEMALE = 'female', 'Female'
+        FEMALE = 'female', 'Female',
+        OTHER = 'other', 'Other'
 
 class Preffered_Contact_Method(models.TextChoices):
     EMAIL = 'email', 'Email'
@@ -64,10 +65,11 @@ class Donor(models.Model):
     # these fields will be populated when the user vistis the station
     is_eligible_to_donate = models.BooleanField(default=True, blank=True) #----> doctor to conduct a survey
     type_donation = models.CharField(max_length=200, blank=True, choices=DonationType)
-    amount_of_donation = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    blood_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Amount of blood donated (bags)")
+    amount_of_donation = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="How much Money paid for the donation")
     weight_kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    number_of_donations = models.PositiveIntegerField(null=True, blank=True)
-    last_donation_date = models.DateField(null=True, blank=True)
+    number_of_donations = models.PositiveIntegerField(default=0, null=True, blank=True)
+    last_donation_date = models.DateField(default=datetime.today, null=True, blank=True)
 
     created = models.DateField(auto_now=True, null=True, blank=True)
     modified = models.DateField(auto_now_add=True, null=True, blank=True)
@@ -96,9 +98,9 @@ class Donor(models.Model):
         return self.user.username
     
 class DonorDonations(models.Model):
-    donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    blood_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text="Amount of blood donated in ml")
+    blood_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text="Amount of blood donated (bags)")
     beneficiary = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     created = models.DateField(auto_now=True, null=True, blank=True)
@@ -144,7 +146,6 @@ class Impact(models.Model):
 
     def __str__(self):
         return f"Impact for {self.donor}"
-
 
 class DonorSettings(models.Model):
     donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='donor_settings')

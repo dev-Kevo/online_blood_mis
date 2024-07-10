@@ -1,5 +1,5 @@
 from django.contrib import admin
-from patients.models import Patient, PatientAppointment, PatientDonations
+from patients.models import Patient, PatientAppointment, PatientDonations, PatientSettings
 
 
 @admin.register(Patient)
@@ -15,4 +15,9 @@ class PatientAdmin(admin.ModelAdmin):
 @admin.register(PatientDonations)
 class PatientDonationsAdmin(admin.ModelAdmin):
     list_display = ['patient', 'amount_of_blood_used']
+
+
+@admin.register(PatientSettings)
+class PatientSettingsAdmin(admin.ModelAdmin):
+    list_display = ['patient', 'email_notifications', 'sms_notifications', 'push_notifications', 'default_notification_method']
 

@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from core.models import CustomUser
 from donors.models import Donor, DonorSettings
 from patients.models import Patient
+from doctors.models import Doctor
 import uuid
 
 @receiver(post_save, sender=CustomUser)
@@ -27,8 +28,9 @@ def update_user_signal(sender, instance, created, **kwargs):
         patient.save()
 
     elif created and instance.is_doctor:
-        pass
-
+        # create a doctor instance immediately once the user has been created
+        doctor = Doctor.objects.create(user=instance)
+        doctor.save()
     
      
 

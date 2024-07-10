@@ -30,16 +30,26 @@ class Doctor(models.Model):
     ]
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doctor_profile')
-    license_number = models.CharField(max_length=20, unique=True)
-    specialty = models.CharField(max_length=100, choices=SPECIALTY_CHOICES)
-    hospital_affiliated = models.CharField(max_length=100)
+    license_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
+    specialty = models.CharField(max_length=100, choices=SPECIALTY_CHOICES, blank=True, null=True)
+    hospital_affiliated = models.CharField(max_length=100, blank=True, null=True)
     is_available = models.BooleanField(default=True)
-    no_appointments = models.PositiveIntegerField(default=0)
+    no_appointments = models.PositiveIntegerField(default=0, blank=True, null=True)
+    number_max_appointments = models.PositiveIntegerField(default=10, null=True, blank=True, help_text="Number of appointments a doctor can take per day")
     created = models.DateField(auto_now=True, null=True, blank=True)
     modified = models.DateField(auto_now_add=True, null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Doctor"
+        verbose_name_plural = "Doctors"
+
     @property
     def get_availability_status(self):
+        if self.no_appointments >= self.number_max_appointments:
+            self.is_available = False
+        else:
+            self.is_available = True
+
         return self.is_available
     
     def update_no_appointments(self, state):
@@ -55,13 +65,8 @@ class Doctor(models.Model):
         else:
             self.no_appointments -= 1
             
-    
     def __str__(self):
-        return f"Dr. {self.user.username} ({self.specialty})"
-
-    class Meta:
-        verbose_name = "Doctor"
-        verbose_name_plural = "Doctors"
+        return f"Dr. {self.user.username} ({self.specialty})" 
 
 class DoctorAppointments(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
@@ -114,8 +119,9 @@ class BloodInventory(models.Model):
         O_NEG = 'O-', 'O-'
         UNKNOWN = 'UNKNOWN', 'UNKNOWN'
 
+    donor = models.ForeignKey(Donor, on_delete=models.CASCADE, blank=True, null=True)  
     blood_group = models.CharField(max_length=10, choices=BloodGroup.choices)
-    quantity_ml = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text="Amount of blood donated (bags)")
     expiry_date = models.DateField()
     created = models.DateField(auto_now=True, null=True, blank=True)
     modified = models.DateField(auto_now_add=True, null=True, blank=True)
@@ -123,7 +129,7 @@ class BloodInventory(models.Model):
 
     class Meta:
         verbose_name = "Blood Inventory"
-        verbose_name_plural = "Blood Inventory"
+        verbose_name_plural = "Blood Inventories"
 
     def __str__(self):
-        return f"{self.get_blood_group_display()}: {self.quantity_ml} ml"
+        return f"{self.quantity} Bags of {self.blood_group} blood donated by {self.donor.user.username} on {self.created}"

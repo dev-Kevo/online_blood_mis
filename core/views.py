@@ -89,12 +89,6 @@ def logout_user(request):
     return redirect('login')
     # return render(request, 'authentication/logged.html')
 
-def doctor_update_info(request):
-    """
-    make sure the doctor has updated the required information
-    """
-
-    return render(request, 'core/doctors_update_info.html')
 
 def welcome(request):
     """

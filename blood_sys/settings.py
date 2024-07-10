@@ -43,11 +43,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #system apps
     'core',
     'doctors',
     'donors',
     'patients',
+    'reports',
 
+    #third party apps
     'tailwind',
     'theme',
     'django_browser_reload',

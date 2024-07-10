@@ -19,11 +19,57 @@
         
         <div class="container mx-auto">
             {% if donations %}
-              {% for donation in donations %}
-                <p>Donation to: {{donation.beneficiary}}</p>
-              {% endfor %}
-            {% else %}
-                <p>No donations found</p>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <table class="w-full text-sm text-left rounded text-gray-500 dark:text-gray-400">
+                  <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                          <th scope="col" class="px-6 py-3">
+                              #
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                              Blood Amount (Bags)
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                              Station
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                              Beneficiary
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                              Donation Date
+                          </th>
+                          
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for donation in donations %}
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {{ forloop.counter }}
+                          </th>
+                          <td class="px-6 py-4">
+                              {{donation.blood_amount}} Bags
+                          </td>
+                          <td class="px-6 py-4">
+                              {{donor.donation_location}}
+                          </td>
+                          <td class="px-6 py-4">
+                              {{donation.beneficiary}}
+                          </td>
+                          <td class="px-6 py-4">
+                              {{donor.last_donation_date}}
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  
+                  
+                  </tbody>
+              </table>
+          </div>
+      {% else %}
+          <div class="p-4 mb-4 text-sm text-blue-800 text-center rounded-lg bg-blue-100 dark:bg-gray-800 dark:text-blue-400" role="alert">
+              <span class="font-medium">No Donations Found</span>
+          </div>
             {% endif %}
         </div>
      

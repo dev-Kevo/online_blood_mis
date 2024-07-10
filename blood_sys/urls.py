@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('core.urls')),
     path('doctor/', include('doctors.urls')),
     path('donors/', include('donors.urls')),
+    path("reports/", include('reports.urls'), name=""),
     path('patients/', include('patients.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
     

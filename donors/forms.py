@@ -108,21 +108,22 @@ class UpdateDonorAfterDonationForm(forms.ModelForm):
             'amount_of_donation',
             'blood_group',
             'type_donation',
+            'blood_amount',
             'weight_kg',
         ]
 
 
         widgets = {
 
-            'amount_of_donation': forms.NumberInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
+            'amount_of_donation': forms.NumberInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-5'}),
             
-            'blood_amount': forms.NumberInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
+            'blood_amount': forms.NumberInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-5'}),
 
-            'blood_group': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
+            'blood_group': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-5'}),
 
-            'type_donation': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
+            'type_donation': forms.Select(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-5'}),
 
-            'weight_kg': forms.NumberInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}),
+            'weight_kg': forms.NumberInput(attrs={'class': 'block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-5'}),
 
         }
 

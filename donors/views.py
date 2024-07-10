@@ -19,10 +19,13 @@ def donors_dashboard(request):
     """
     doctors = Doctor.objects.filter(is_available=True)
     user = request.user
+    if not user.is_donor:
+        messages.error(request, "You are not authorized to view this page.")
+        return redirect('login')
     donor = Donor.objects.get(user=user)
-    recent_donations = DonorDonations.objects.filter(donor=user).order_by('-created')[:5]
+    recent_donations = DonorDonations.objects.filter(donor=donor).order_by('-created')[:5]
     total_donations = recent_donations.count()
-    total_donated_amount = DonorDonations.objects.filter(donor=user).aggregate(total=Sum('amount'))['total'] or 0
+    total_donated_amount = DonorDonations.objects.filter(donor=donor).aggregate(total=Sum('amount'))['total'] or 0
     upcoming_appointments = DonorAppointment.objects.filter(donor=user, date__gte=timezone.now()).order_by('created')
 
     if donor.user.is_verified: 
@@ -98,7 +101,7 @@ def donors_dashboard(request):
 def profile(request, pk):
     user = request.user
     donor = get_object_or_404(Donor, pk=pk)
-    total_donations = Donations.objects.filter(donor=user).count()
+    total_donations = DonorDonations.objects.filter(donor=user).count()
     total_appointments = DonorAppointment.objects.filter(donor=user).count()
 
     update_form = DonorUpdateFormOne()
@@ -107,7 +110,7 @@ def profile(request, pk):
         if update_form.is_valid():
             update_form.save()
             messages.success(request, f"Information Updated successfully")
-            return HttpResponseRedirect(reverse('donor_update_info', args=[donor.id]))
+            return HttpResponseRedirect(reverse('donor_profile', args=[donor.id]))
     else:
         update_form = DonorUpdateFormOne(instance=donor)
 
@@ -144,26 +147,27 @@ def appointments(request):
 
             if doctors.exists():
                 selected_doctor = random.choice(doctors)
-                
-                appointment = DonorAppointment.objects.create(
-                    donor=user,
-                    date=date,
-                    time=time,
-                    beneficiary=beneficiary,
-                    location=location
-                )
-                appointment.save()
 
-                if selected_doctor.no_appointments >= 50:
-                    selected_doctor.is_available = False
-                    selected_doctor.save()
-                else:
+                print(selected_doctor.get_availability_status)
+
+                if selected_doctor.get_availability_status: 
+                    appointment = DonorAppointment.objects.create(
+                        donor=user,
+                        date=date,
+                        time=time,
+                        beneficiary=beneficiary,
+                        location=location
+                    )
+                    appointment.save()
+
+                
                     doctors_appointment = DoctorAppointments.objects.create(
                         doctor=selected_doctor,
                         donor=donor,
                         date=date,
                         time=time
                     )
+
                     doctors_appointment.save()
                     selected_doctor.update_no_appointments('add')
                     selected_doctor.save()
@@ -174,9 +178,13 @@ def appointments(request):
                         message=f"{donor} will be donating blood on {date} at {time}"
                     )
                     doctors_notification.save()
-
-                messages.success(request, "Appointment created successfully. Visit your preferred donation location to donate.")
-                return redirect('appointments')
+                    messages.success(request, "Appointment created successfully. Visit your preferred donation location to donate.")
+                    return redirect('appointments')
+                
+                else:
+                    messages.error(request, "No doctors available at the moment, please try again later!")
+                    return redirect('appointments')
+                         
             else:
                 messages.error(request, "No doctors available at the moment, please try again later!")
         else:
@@ -248,7 +256,7 @@ def donor_settings(request):
     user = request.user
     donor = Donor.objects.get(user=user)
     donor_settings = DonorSettings.objects.get(donor=donor.user)
-    print(donor_settings)
+
     settings_form = DonorSettingsForm()
 
     if request.method == 'POST':

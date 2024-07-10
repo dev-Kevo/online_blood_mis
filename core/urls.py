@@ -9,7 +9,6 @@ urlpatterns = [
     path('accounts/register/', views.register, name='register'),
     path('accounts/login/', views.login_user, name='login'),
     path('accounts/logout/', views.logout_user, name='logout'),
-    path('doctors/update_info/', views.doctor_update_info, name='doctor_update_info'),
     
     # path('tailwind/', views.tailwind_test, name='tailwind_test'),
     path('about/', views.About.as_view(), name='about'),
