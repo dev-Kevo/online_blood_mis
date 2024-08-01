@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from core.models import CustomUser
 from donors.models import Donor, DonorSettings
-from patients.models import Patient
+from patients.models import Patient, PatientSettings
 from doctors.models import Doctor
 import uuid
 
