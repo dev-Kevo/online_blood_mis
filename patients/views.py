@@ -180,6 +180,7 @@ def patient_appointments(request):
                             notify_from="Donor" if request.user.is_donor else "Patient",
                             message=f"{patient} will be donating blood on {date} at {time}"
                         )
+                        
                         doctors_notification.save()
 
                         messages.success(request, "Appointment created successfully. Visit your preferred donation location to donate.")
